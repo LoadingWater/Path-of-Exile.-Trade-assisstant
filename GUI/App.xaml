@@ -1,0 +1,34 @@
+﻿<Application x:Class="GUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:GUI"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        
+        <FontFamily x:Key="MainFont">Resources/Fonts/#Fontin SmallCaps</FontFamily>
+        <Style x:Key="HeadingStyle" TargetType="Control">
+            <Setter Property="FontFamily" Value="Resources/Fonts/#Fontin SmallCaps"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#371200"/>
+        </Style>
+
+        <Style x:Key="TabsStyle" TargetType="Control">
+            <Setter Property="FontFamily" Value="Resources/Fonts/#Fontin SmallCaps"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#371200"/>
+            <Setter Property="Width" Value="209"/>
+            <Setter Property="Height" Value="50"/>
+        </Style>
+
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="Red"/>
+        </Style>
+    </Application.Resources>
+</Application>
