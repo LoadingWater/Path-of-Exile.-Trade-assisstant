@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Backend;
+
 
 namespace GUI
 {
@@ -41,12 +45,25 @@ namespace GUI
         private void GoButton_Click(object sender, RoutedEventArgs e)
         {
             TabItem item = new TabItem();
-            item.Style = this.FindResource("TabsStyle") as Style;
             item.Header = "new Header";
+            item.Style = this.FindResource("TabsStyle") as Style;
             item.Content = "aldskfja;lskdfjl;askdjfl;asdjfl;kkasjdflkasjdf;lasdf";
             TabControlKey.Items.Add(item);
         }
 
-        
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            TableDataTestClass test1 = new TableDataTestClass() { Name = "Name1", Price = 1 };
+            TableDataTestClass test2 = new TableDataTestClass() { Name = "Name2", Price = 2 };
+            TableDataTestClass test3 = new TableDataTestClass() { Name = "Name3", Price = 3 };
+            BindingList<TableDataTestClass> myData = new BindingList<TableDataTestClass>();
+            myData.Add(test1);
+            myData.Add(test2);
+            myData.Add(test3);
+
+            PathOfExileApiFunctions.InitializeClientAndHandler();
+            PathOfExileApiFunctions.GetItemsInAStashTabAsync("79b7ba7eb9c78313c61b64726904084b", "Hardcore", "GoStormUp", 9);
+            dgDataTable.ItemsSource = myData;
+        }
     }
 }

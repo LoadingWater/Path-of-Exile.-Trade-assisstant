@@ -14,6 +14,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#371200"/>
+            <Setter Property="Height" Value="50"/>
         </Style>
 
         <Style x:Key="TabsStyle" TargetType="Control">
@@ -23,8 +24,11 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#371200"/>
-            <Setter Property="Width" Value="209"/>
             <Setter Property="Height" Value="50"/>
+        </Style>
+
+        <Style x:Key="DataGridComboboxStyle" TargetType="ComboBox">
+            <Setter Property="ItemsSource" Value="{Binding List, RelativeSource={RelativeSource AncestorType=Window}}"/>
         </Style>
 
         <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
