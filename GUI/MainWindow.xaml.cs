@@ -61,8 +61,7 @@ namespace GUI
             myData.Add(test2);
             myData.Add(test3);
 
-            PathOfExileApiFunctions.InitializeClientAndHandler();
-            PathOfExileApiFunctions.GetItemsInAStashTabAsync("79b7ba7eb9c78313c61b64726904084b", "Hardcore", "GoStormUp", 9);
+            PathOfExileApiFunctions.GetItemsInAStashTabAsync("79b7ba7eb9c78313c61b64726904084b", "Hardcore", "GoStormUp", 0, ItemVariant.itemsWithNameAndPrice);
             dgDataTable.ItemsSource = myData;
         }
     }
