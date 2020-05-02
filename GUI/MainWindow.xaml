@@ -1,87 +1,73 @@
-﻿ <Window x:Class="GUI.MainWindow"
+﻿<Window x:Class="GUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="Trade assisstant" Height="720" Width="1280"
-        Loaded="Window_Loaded">
-    <Grid>
+        Title="Trade assisstant" MinHeight="480" MinWidth="640"
+        Loaded="Window_Loaded" d:DesignWidth="1290" d:DesignHeight="728">
+    <Grid Background="{StaticResource MainDarkBrownColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <Grid  Grid.Row="0">
-            <ScrollViewer VerticalScrollBarVisibility="Visible"
-                          HorizontalScrollBarVisibility="Disabled"
-                          FlowDirection="RightToLeft"
-                          Foreground="#1E1111">
-                <TabControl TabStripPlacement="Right"
-                            x:Name="TabControlKey"
-                            Background="#1E1111"
-                            VerticalAlignment="Top">
-                    <TabItem Header="asdfasdf"
-                             Style="{StaticResource TabsStyle}">
-                        <DataGrid x:Name="dgDataTable"
-                                  FlowDirection="LeftToRight"
-                                  CanUserResizeColumns="False"
-                                  CanUserReorderColumns="False"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Item"
-                                                    Width="*"
-                                                    HeaderStyle="{StaticResource TabsStyle}"
-                                                    Binding="{Binding Path=Name}"/>
-                                <DataGridTemplateColumn Header="Price"
-                                                        Width="*"
-                                                        HeaderStyle="{StaticResource TabsStyle}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ComboBox ItemsSource="{Binding Price}"
-                                                      SelectedItem="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Elapsed time(all)"
-                                                    Width="*"
-                                                    HeaderStyle="{StaticResource TabsStyle}"/>
-                                <DataGridTextColumn Header="From last change"
-                                                    Width="*"
-                                                    HeaderStyle="{StaticResource TabsStyle}"/>
-                            </DataGrid.Columns>
-                            
-                            
-                        </DataGrid>
-                    </TabItem>
-                </TabControl>
-            </ScrollViewer>
-        </Grid>
+        <TabControl Style="{StaticResource TabControlStyle}"
+                    x:Name="MainTabControl"
+                    TabStripPlacement="Right"
+                    FlowDirection="RightToLeft">
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid FlowDirection="LeftToRight">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <ScrollViewer Grid.Column="0"
+                                      VerticalScrollBarVisibility="Visible"
+                                      FlowDirection="RightToLeft">
+                            <TabPanel x:Name="HeaderPanel"
+                                      Margin="0"
+                                      IsItemsHost="true"
+                                      MaxWidth="200"/>
+                        </ScrollViewer>
+                        <ContentPresenter Grid.Column="1"
+                                          x:Name="PART_SelectedContentHost"
+                                          ContentSource="SelectedContent"/>
+                    </Grid>
+                    
+
+                </ControlTemplate>
+            </TabControl.Template>
+            
+        </TabControl>
 
         <!--region Down definition-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition MinWidth="150" MaxWidth="300"/>
+                <ColumnDefinition MinWidth="40" MaxWidth="80"/>
+                <ColumnDefinition MinWidth="200" MaxWidth="400"/>
+                <ColumnDefinition MinWidth="50" MaxWidth="100"/>
+                <ColumnDefinition MinWidth="50" MaxWidth="100"/>
+                <ColumnDefinition MinWidth="50"/>
             </Grid.ColumnDefinitions>
 
             <!--Used to fill without any problem. Easier than listbox. no need ot bind-->
             <DockPanel x:Name="ListBox"
-                     Grid.Row="0"
-                     Grid.Column="0"
-                     Background="#371200">
-                <TextBox x:Name="EnterPoEID"
-                         Text="Enter PoE ID" 
-                         Margin="5"
-                         Style="{StaticResource HeadingStyle}"
-                         Background="AliceBlue"
-                         Foreground="Black"
-                         GotFocus="EnterPoEID_GotFocus"
-                         LostFocus="EnterPoEID_LostFocus">
-                </TextBox>
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Background="{StaticResource BrownButtonColor}"
+                       Width="{Binding }">
+                <Border Style="{StaticResource BorderStyle}">
+                    <TextBox x:Name="EnterPoEID"
+                             Text="Enter PoE ID"
+                             Style="{StaticResource TextBoxStyle}"
+                             GotFocus="EnterPoEID_GotFocus"
+                             LostFocus="EnterPoEID_LostFocus">
+                    </TextBox>
+                </Border>
             </DockPanel>
 
             <Button x:Name="GoButton"
@@ -89,16 +75,30 @@
                     Grid.Row="0"
                     Content="Go"
                     Click="GoButton_Click"
-                    Style="{StaticResource HeadingStyle}">
-            </Button>
+                    Style="{StaticResource ButtonStyle}"/>
 
             <ComboBox Grid.Column="2"
                       Grid.Row="0"
-                      Style="{StaticResource ComboBoxStyle}">
+                      Style="{StaticResource ComboboxStyle}">
                 
                 <ComboBoxItem Content="No Item"
-                              Style="{StaticResource HeadingStyle}"
                               Height="50"/>
+            </ComboBox>
+
+            <Button Name="RefreshButton"
+                    Grid.Column="3"
+                    Grid.Row="0"
+                    Content="Refresh"
+                    Click="RefreshButton_Click"
+                    Style="{StaticResource ButtonStyle}"/>
+
+            <ComboBox Name="RefreshEveryButton"
+                      Grid.Column="4"
+                      Grid.Row="0">
+                <ComboBoxItem Content="1 minute" IsSelected="True"/>
+                <ComboBoxItem Content="2 minute" IsSelected="False"/>
+                <ComboBoxItem Content="3 minute" IsSelected="False"/>
+                <ComboBoxItem Content="5 minute" IsSelected="False"/>
             </ComboBox>
         </Grid>
         <!--#endregion-->

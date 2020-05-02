@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace Backend
+namespace Backend.Models
 {
     public class Stash
     {

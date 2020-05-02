@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
-namespace Backend
+namespace Backend.Models
 {
     public class ItemModel
     {
@@ -15,7 +14,7 @@ namespace Backend
 
         public class Tab
         {
-            //n - note on a tab/ ~1 chaos orb
+            //n - name of the tab/ ~1 chaos orb
             public string n { get; set; }
             //i - tab number/ starts from 0
             public int i { get; set; }
