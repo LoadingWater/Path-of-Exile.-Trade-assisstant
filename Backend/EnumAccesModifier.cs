@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GUI
+namespace Backend
 {
-    class TableDataTestClass
+    enum EAccessModifier
     {
-        public string Name { get; set; }
-        public int Price { get; set; }
+        Public,
+        Private,
+        All
     }
 }

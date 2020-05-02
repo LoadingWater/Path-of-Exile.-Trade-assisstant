@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GUI
+namespace Backend
 {
-    class TableDataTestClass
+    public enum ItemVariant
     {
-        public string Name { get; set; }
-        public int Price { get; set; }
+        allItems,
+        itemsWithName,
+        itemsWithNameAndPrice
     }
 }
