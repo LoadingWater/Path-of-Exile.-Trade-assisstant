@@ -1,5 +1,9 @@
 ﻿using Backend.GUIFunctions;
 using System.Windows;
+using Backend.Classes;
+using System;
+
+
 
 namespace GUI
 {
@@ -9,6 +13,8 @@ namespace GUI
     public partial class MainWindow : Window
     {
         GUIFunctions guiFunctions = new GUIFunctions();
+        CustomClient client;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -29,7 +35,12 @@ namespace GUI
 
         private async void GoButton_Click(object sender, RoutedEventArgs e)
         {
-            guiFunctions.GoButtonFunction("79b7ba7eb9c78313c61b64726904084b", "Hardcore", "GoStormUp", MainTabControl, (Style)TryFindResource("DataGridStyle"));
+            //97dfc9145fbfc40c9e19031c4e1b08ba
+            if (EnterPoEID.Text.Length > 0 && EnterPoEID.Text.ToString() != "Enter PoE ID")
+            {
+                client = CustomClient.GetClient("POESESSID", EnterPoEID.Text.ToString(), new Uri("https://www.pathofexile.com/"));
+                guiFunctions.GoButtonFunction(client, "Hardcore", "GoStormUp", MainTabControl, (Style)TryFindResource("DataGridStyle"));
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

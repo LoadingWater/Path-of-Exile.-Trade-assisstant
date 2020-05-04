@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Backend.APIFunctions;
+using Backend.Classes;
 
 namespace Backend.GUIFunctions
 {
@@ -15,49 +16,51 @@ namespace Backend.GUIFunctions
     {
         Stopwatch cooldown = new Stopwatch();
         bool firstTime = true;
-        public async Task GoButtonFunction(string poeSessid, string league, string accountName, TabControl tabControl, Style style)
+        public async Task GoButtonFunction(CustomClient client, string league, string accountName, TabControl tabControl, Style style)
         {
             try
             {
                 //TODO function parametrs null arg check
+                //TODO no cooldown if forbidden
                 if (cooldown.ElapsedMilliseconds > 60000 || firstTime)
                 {
                     firstTime = false;
                     cooldown.Restart();
-                    int numberOfStashTabs = await PathOfExileApiFunctions.GetStashTabNumbersAsync(poeSessid, league, accountName);
 
+                    int numberOfStashTabs = await PathOfExileApiFunctions.GetNumberOfStashTabs(client, league, accountName);
                     List<Task<List<TrimmedItemModel>>> tasks = new List<Task<List<TrimmedItemModel>>>();
+
+                    //TODO: 40 prosto stoit tut. ne znaju predela zaprosow na 60 sec
                     for (int i = 0; i < 40; i++)
                     {
                         //didnt work without another variable
                         int tmp = i;
-                        tasks.Add(Task.Run(() => PathOfExileApiFunctions.GetItemsInAStashTabAsync(poeSessid, league, accountName, tmp, ItemVariant.itemsWithNameAndPrice)));
+                        tasks.Add(Task.Run(() => PathOfExileApiFunctions.GetItemsInAStashTabAsync(client, league, accountName, tmp, ItemVariant.itemsWithNameAndPrice)));
                     }
                     await Task.WhenAll(tasks);
-                    //tasks[stashNumber].Result[itemNumber] 
                     //create and fill structure with tab items
-                    for (int i = 0; i < 40; i++)
+                    for (int stashNumber = 0; stashNumber < 40; stashNumber++)
                     {
                         ItemsForDataGrid itemsForDataGrid = new ItemsForDataGrid();
-                        for (int i2 = 0; i2 < tasks[i].Result.Count; i2++)
+                        //tasks[stashNumber].Result[itemNumber] 
+                        int numberOfItemsInATab = tasks[stashNumber].Result.Count;
+                        for (int itemNumber = 0; itemNumber < numberOfItemsInATab; itemNumber++)
                         {
                             //if there are items in a tab add them
-                            if (tasks[i].Result.Count != 0)
+                            if (numberOfItemsInATab > 0)
                             {
-                                itemsForDataGrid.items.Add(tasks[i].Result[i2]);
+                                itemsForDataGrid.items.Add(tasks[stashNumber].Result[itemNumber]);
                             }
                         }
-                        //if there are items in a tab => create dataGrid
-                        if (tasks[i].Result.Count != 0)
+                        //if any items in a tab/ if not dont create DataGrid
+                        if (tasks[stashNumber].Result.Count > 0)
                         {
+                            //TODO:create a control template to elluminate manual creation of the grid
                             DataGrid dataGrid = new DataGrid() { ItemsSource = itemsForDataGrid.items };
                             dataGrid.Style = style;
-                            /*DockPanel dock = new DockPanel();
-                            DockPanel.SetDock(dataGrid, Dock.Top);
-                            dock.Children.Add(dataGrid);*/
-
+                            //item[0] null if items == 0
                             TabItem item = new TabItem() { Header = itemsForDataGrid.items[0].TabName, Content = dataGrid };
-                            //columns
+                            //Creation of DataGrid columns
                             DataGridTextColumn nameColumn = new DataGridTextColumn();
                             nameColumn.Header = "Name";
                             nameColumn.Binding = new Binding("Name");
@@ -79,7 +82,17 @@ namespace Backend.GUIFunctions
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                if (ex.HResult == -2146233088)
+                {
+                    MessageBox.Show("Wrong POESESSID");
+                    //NOTE:Easy to trick
+                    firstTime = true;
+                }
+                else
+                {
+                    MessageBox.Show($"{ex.Message}\n{ex.Source}");
+                }
+
             }
         }
     }

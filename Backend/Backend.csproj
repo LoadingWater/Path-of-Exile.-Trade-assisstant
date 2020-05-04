@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Classes\CustomClient.cs" />
     <Compile Include="Enums\ItemVariant.cs" />
-    <Compile Include="GUI Functions\GUIFunctions.cs" />
+    <Compile Include="GUI_Functions\GUIFunctions.cs" />
     <Compile Include="Models\ItemsForDataGrid.cs" />
     <Compile Include="Models\TrimmedItemModel.cs" />
     <Compile Include="API Functions\PathOfExileApiFunctions.cs" />

@@ -5,27 +5,34 @@ using System.Windows;
 
 namespace Backend.Classes
 {
-    public static class CustomClient
+    public class CustomClient
     {
-        public static HttpClient HttpClient { get; set; }
-        public static HttpClientHandler HttpClientHandler { get; set; }
-        public static CookieContainer CookieContainer { get; set; }
-        public static void CreateClient(Uri baseAddress, string poesessid)
+        private static CustomClient _customClient;
+        private CustomClient()
         {
-            try
+            CookieContainer = new CookieContainer();
+            HttpClientHandler = new HttpClientHandler() { CookieContainer = CookieContainer };
+            HttpClient = new HttpClient(HttpClientHandler);
+        }
+        public HttpClient HttpClient { get; private set; }
+        private HttpClientHandler HttpClientHandler { get; set; }
+        private CookieContainer CookieContainer { get; set; }
+
+        public static CustomClient GetClient(string cookieName = null, string cookieValue = null, Uri addressForCookies = null)//TODO: mb check na обязательную поставка аргументов?
+        {
+            if (_customClient == null)
             {
-                CookieContainer = new CookieContainer();
-                CookieContainer.Add(baseAddress, new Cookie("POESESSID", poesessid));
-                HttpClientHandler = new HttpClientHandler();
-                HttpClientHandler.CookieContainer = CookieContainer;
-                HttpClient = new HttpClient(HttpClientHandler);
-                HttpClient.BaseAddress = baseAddress;
+                _customClient = new CustomClient();
             }
-            catch (Exception e)
+            if (cookieName != null && cookieValue != null && addressForCookies != null)
             {
-                MessageBox.Show(e.Message);
-                throw;
+                _customClient.CookieContainer.Add(addressForCookies, new Cookie(cookieName, cookieValue));                
             }
+            return _customClient;
+        }
+        public void SetCookies(Uri address, string cookieName, string value)
+        {
+            CookieContainer.Add(address, new Cookie(cookieName, value));
         }
     }
 }
