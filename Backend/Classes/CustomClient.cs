@@ -7,32 +7,16 @@ namespace Backend.Classes
 {
     public class CustomClient
     {
-        private static CustomClient _customClient;
-        private CustomClient()
+        public CustomClient(Cookie cookie, Uri clientBaseAddress)
         {
             CookieContainer = new CookieContainer();
+            CookieContainer.Add(clientBaseAddress, cookie);
             HttpClientHandler = new HttpClientHandler() { CookieContainer = CookieContainer };
             HttpClient = new HttpClient(HttpClientHandler);
+            HttpClient.BaseAddress = clientBaseAddress;
         }
         public HttpClient HttpClient { get; private set; }
-        private HttpClientHandler HttpClientHandler { get; set; }
-        private CookieContainer CookieContainer { get; set; }
-
-        public static CustomClient GetClient(string cookieName = null, string cookieValue = null, Uri addressForCookies = null)//TODO: mb check na обязательную поставка аргументов?
-        {
-            if (_customClient == null)
-            {
-                _customClient = new CustomClient();
-            }
-            if (cookieName != null && cookieValue != null && addressForCookies != null)
-            {
-                _customClient.CookieContainer.Add(addressForCookies, new Cookie(cookieName, cookieValue));                
-            }
-            return _customClient;
-        }
-        public void SetCookies(Uri address, string cookieName, string value)
-        {
-            CookieContainer.Add(address, new Cookie(cookieName, value));
-        }
+        public HttpClientHandler HttpClientHandler { get; private set; }
+        public CookieContainer CookieContainer { get; private set; }
     }
 }

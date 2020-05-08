@@ -2,6 +2,8 @@
 using System.Windows;
 using Backend.Classes;
 using System;
+using System.Net;
+using Backend.Models;
 
 
 
@@ -13,7 +15,7 @@ namespace GUI
     public partial class MainWindow : Window
     {
         GUIFunctions guiFunctions = new GUIFunctions();
-        CustomClient client;
+        CustomClient client = new CustomClient(new Cookie("POESESSID", "default"), new Uri("https://pathofexile.com/"));
         
         public MainWindow()
         {
@@ -38,8 +40,8 @@ namespace GUI
             //97dfc9145fbfc40c9e19031c4e1b08ba
             if (EnterPoEID.Text.Length > 0 && EnterPoEID.Text.ToString() != "Enter PoE ID")
             {
-                client = CustomClient.GetClient("POESESSID", EnterPoEID.Text.ToString(), new Uri("https://www.pathofexile.com/"));
-                guiFunctions.GoButtonFunction(client, "Hardcore", "GoStormUp", MainTabControl, (Style)TryFindResource("DataGridStyle"));
+                client.CookieContainer.Add(new Uri("https://pathofexile.com/"), new Cookie("POESESSID", EnterPoEID.Text.ToString()));
+                guiFunctions.GoButtonFunction(client, new PlayerInfo("Hardcore", "GoStormUp"), MainTabControl, (Style)TryFindResource("DataGridStyle"));
             }
         }
 

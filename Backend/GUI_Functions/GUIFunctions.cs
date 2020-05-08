@@ -11,12 +11,13 @@ using Backend.Classes;
 
 namespace Backend.GUIFunctions
 {
-
+    using ItemsInOneTab = Task<List<TrimmedItemModel>>;
+    using EveryTabWithItems = List<Task<List<TrimmedItemModel>>>;
     public class GUIFunctions
     {
         Stopwatch cooldown = new Stopwatch();
         bool firstTime = true;
-        public async Task GoButtonFunction(CustomClient client, string league, string accountName, TabControl tabControl, Style style)
+        public async Task GoButtonFunction(CustomClient client, PlayerInfo playerInfo, TabControl tabControl, Style style)
         {
             try
             {
@@ -27,49 +28,29 @@ namespace Backend.GUIFunctions
                     firstTime = false;
                     cooldown.Restart();
 
-                    int numberOfStashTabs = await PathOfExileApiFunctions.GetNumberOfStashTabs(client, league, accountName);
-                    List<Task<List<TrimmedItemModel>>> tasks = new List<Task<List<TrimmedItemModel>>>();
-
-                    //TODO: 40 prosto stoit tut. ne znaju predela zaprosow na 60 sec
-                    for (int i = 0; i < 40; i++)
-                    {
-                        //didnt work without another variable
-                        int tmp = i;
-                        tasks.Add(Task.Run(() => PathOfExileApiFunctions.GetItemsInAStashTabAsync(client, league, accountName, tmp, ItemVariant.itemsWithNameAndPrice)));
-                    }
-                    await Task.WhenAll(tasks);
+                    EveryTabWithItems tabs = new EveryTabWithItems();
+                    tabs = await PathOfExileApiFunctions.GetItemsInAllStashTabsAsync(client, playerInfo);
                     //create and fill structure with tab items
-                    for (int stashNumber = 0; stashNumber < 40; stashNumber++)
+
+                    for (int stashNumber = 0; stashNumber < tabs.Count; stashNumber++)
                     {
                         ItemsForDataGrid itemsForDataGrid = new ItemsForDataGrid();
-                        //tasks[stashNumber].Result[itemNumber] 
-                        int numberOfItemsInATab = tasks[stashNumber].Result.Count;
+                        int numberOfItemsInATab = tabs[stashNumber].Result.Count;
+
                         for (int itemNumber = 0; itemNumber < numberOfItemsInATab; itemNumber++)
                         {
-                            //if there are items in a tab add them
                             if (numberOfItemsInATab > 0)
                             {
-                                itemsForDataGrid.items.Add(tasks[stashNumber].Result[itemNumber]);
+                                itemsForDataGrid.items.Add(tabs[stashNumber].Result[itemNumber]);
                             }
                         }
                         //if any items in a tab/ if not dont create DataGrid
-                        if (tasks[stashNumber].Result.Count > 0)
+                        if (tabs[stashNumber].Result.Count > 0)
                         {
                             //TODO:create a control template to elluminate manual creation of the grid
-                            DataGrid dataGrid = new DataGrid() { ItemsSource = itemsForDataGrid.items };
-                            dataGrid.Style = style;
-                            //item[0] null if items == 0
+                            DataGrid dataGrid = new DataGrid();
+                            dataGrid = CreateDataGridColumns(itemsForDataGrid, style);
                             TabItem item = new TabItem() { Header = itemsForDataGrid.items[0].TabName, Content = dataGrid };
-                            //Creation of DataGrid columns
-                            DataGridTextColumn nameColumn = new DataGridTextColumn();
-                            nameColumn.Header = "Name";
-                            nameColumn.Binding = new Binding("Name");
-                            dataGrid.Columns.Add(nameColumn);
-                            DataGridTextColumn priceColumn = new DataGridTextColumn();
-                            priceColumn.Header = "Price";
-                            priceColumn.Binding = new Binding("Price");
-                            dataGrid.Columns.Add(priceColumn);
-
                             tabControl.Items.Add(item);
                         }
                     }
@@ -95,5 +76,31 @@ namespace Backend.GUIFunctions
 
             }
         }
+
+        #region Private functions
+        private void AddItemsIfThereAreAny(EveryTabWithItems tabs, ItemsForDataGrid itemsForDataGrid, int stashNumber, int numberOfItemsInATab)
+        {
+            for (int itemNumber = 0; itemNumber < numberOfItemsInATab; itemNumber++)
+            {
+                if (numberOfItemsInATab > 0)
+                {
+                    itemsForDataGrid.items.Add(tabs[stashNumber].Result[itemNumber]);
+                }
+            }
+        }
+        private DataGrid CreateDataGridColumns(ItemsForDataGrid itemsForDataGrid, Style style)
+        {
+            DataGrid dataGrid = new DataGrid() { ItemsSource = itemsForDataGrid.items, Style = style };
+            DataGridTextColumn nameColumn = new DataGridTextColumn() { Header = "Name", Binding = new Binding("Name") };
+            dataGrid.Columns.Add(nameColumn);
+            DataGridTextColumn priceColumn = new DataGridTextColumn() { Header = "Price", Binding = new Binding("Price") };
+            dataGrid.Columns.Add(priceColumn);
+            DataGridTextColumn itemIdColumn = new DataGridTextColumn() { Header = "Item Id", Binding = new Binding("Id") };
+            dataGrid.Columns.Add(itemIdColumn);
+            DataGridTextColumn itemDescriptionColumn = new DataGridTextColumn() { Header = "Description Text", Binding = new Binding("DescText") };
+            dataGrid.Columns.Add(itemDescriptionColumn);
+            return dataGrid;
+        }
+        #endregion
     }
 }

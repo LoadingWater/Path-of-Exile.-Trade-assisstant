@@ -12,7 +12,7 @@ namespace Backend.Models
         public string stash { get; set; }
         public string stashType { get; set; }
         public string league { get; set; }
-        public List<JObject> items { get; set; }
+        public List<ItemModel> items { get; set; }
     }
 
     public class RootObject
