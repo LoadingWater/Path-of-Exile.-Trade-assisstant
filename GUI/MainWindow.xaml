@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         Title="Trade assisstant" MinHeight="480" MinWidth="640"
-        Loaded="Window_Loaded" d:DesignWidth="1290" d:DesignHeight="728">
+        d:DesignWidth="1290" d:DesignHeight="728">
     <Grid Background="{StaticResource MainDarkBrownColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -62,7 +62,7 @@
                        Width="{Binding }">
                 <Border Style="{StaticResource BorderStyle}">
                     <TextBox x:Name="EnterPoEID"
-                             Text="Enter PoE ID"
+                             Text="{Binding Path=GuiData.Poesessid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource TextBoxStyle}"
                              GotFocus="EnterPoEID_GotFocus"
                              LostFocus="EnterPoEID_LostFocus">
@@ -74,8 +74,7 @@
                     Grid.Column="1"
                     Grid.Row="0"
                     Content="Go"
-                    Click="GoButton_Click"
-                    Style="{StaticResource ButtonStyle}"/>
+                    Style="{StaticResource ButtonStyle}" Click="GoButton_Click"/>
 
             <ComboBox Grid.Column="2"
                       Grid.Row="0"
@@ -89,7 +88,6 @@
                     Grid.Column="3"
                     Grid.Row="0"
                     Content="Refresh"
-                    Click="RefreshButton_Click"
                     Style="{StaticResource ButtonStyle}"/>
 
             <ComboBox Name="RefreshEveryButton"

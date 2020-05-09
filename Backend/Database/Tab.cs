@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Backend.Database
 {
-    class Tab
+    public class Tab
     {
         public string TabId { get; set; }
         public string TabName { get; set; }
-        public string StashId { get; set; }
     }
 }

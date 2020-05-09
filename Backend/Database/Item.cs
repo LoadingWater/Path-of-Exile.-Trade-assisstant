@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Database
 {
-    class Item
+    public class Item
     {
         public string ItemId { get; set; }
         public string ItemName { get; set; }
@@ -14,6 +14,5 @@ namespace Backend.Database
         public int    ItemFrameType { get; set; }
         public string ItemIconAddress { get; set; }
         public string TabId { get; set; }
-        public string StashId { get; set; }
     }
 }
