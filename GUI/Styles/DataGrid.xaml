@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:GUI.Styles">
+
+    <Style TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="MinColumnWidth" Value="100"/>
+        <Setter Property="CanUserResizeColumns" Value="False"/>
+        <Setter Property="CanUserResizeRows" Value="False"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Background" Value="{StaticResource DarkBrownColor}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+    </Style>
+    
+</ResourceDictionary>

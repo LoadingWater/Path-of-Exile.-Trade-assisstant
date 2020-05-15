@@ -1,5 +1,4 @@
-﻿using Backend.GUIFunctions;
-using System.Windows;
+﻿using System.Windows;
 using Backend.Classes;
 using System;
 using System.Net;
@@ -8,6 +7,9 @@ using Backend.APIFunctions;
 using Backend.ApplicationViewModel;
 using Backend.Database;
 using System.Diagnostics;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Threading.Tasks;
 
 namespace GUI
 {
@@ -16,8 +18,6 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        //GUIFunctions guiFunctions = new GUIFunctions();
-        //CustomClient client = new CustomClient(new Cookie("POESESSID", "default"), new Uri("https://pathofexile.com/"));
         ApplicationViewModel applicationViewModel = new ApplicationViewModel();
         
         public MainWindow()
@@ -41,28 +41,43 @@ namespace GUI
         }
         #endregion
 
-        #region GoButton
-        private async void GoButton_Click(object sender, RoutedEventArgs e)
+        #region GetItems
+        private async void Get_items_Click(object sender, RoutedEventArgs e)
         {
-            try
+
+            if (applicationViewModel.GuiData.Cooldown.ElapsedMilliseconds == 0 || applicationViewModel.GuiData.Cooldown.ElapsedMilliseconds > 60_000)
             {
-                //97dfc9145fbfc40c9e19031c4e1b08ba
-                applicationViewModel.CustomClient.CookieContainer.Add(new Uri("https://pathofexile.com/"), new Cookie("POESESSID", applicationViewModel.GuiData.Poesessid));
-                var responses = await PathOfExileApiFunctions.GetItemsInAllStashTabsAsStringAsync(applicationViewModel.CustomClient, new PlayerInfo("Hardcore", "GoStormUp"));
-                var models = ResponseToModelConverter.ConvertAllResponses(responses);
-                applicationViewModel.DatabaseFunctions.UpdateDatabase(models, applicationViewModel.DatabaseContext);
-                //Create gui
-            }
-            catch (Exception x)
-            {
-                switch (x.HResult)
+                try
                 {
-                    case -2146233088: MessageBox.Show("Wrong Poesessid"); break;
-                    default:
-                        break;
+                    applicationViewModel.GuiData.Cooldown.Restart();
+
+                    applicationViewModel.CustomClient.CookieContainer.Add(new Uri("https://pathofexile.com/"), new Cookie("POESESSID", applicationViewModel.GuiData.Poesessid));
+                    var responses = await PathOfExileApiFunctions.GetItemsInAllStashTabsAsStringAsync(applicationViewModel.CustomClient, new PlayerInfo("Hardcore", "GoStormUp"));
+                    var models = ResponseToModelConverter.ConvertAllResponses(responses);
+                    applicationViewModel.DatabaseFunctions.UpdateDatabase(models, applicationViewModel.DatabaseContext);
+                    MainTabControl.Items.Clear();
+                    applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl);
+                    //97dfc9145fbfc40c9e19031c4e1b08ba
                 }
+                catch (Exception x)
+                {
+                    switch (x.HResult)
+                    {
+                        case -2146233088: MessageBox.Show("Wrong Poesessid"); applicationViewModel.GuiData.Cooldown.Reset(); break;
+                        default: MessageBox.Show(x.Message); break;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Api cooldown: {60 - applicationViewModel.GuiData.Cooldown.ElapsedMilliseconds * 0.001}"); 
             }
         }
         #endregion
+
+        private void Update_UI_Click(object sender, RoutedEventArgs e)
+        {
+            applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl);
+        }
     }
 }

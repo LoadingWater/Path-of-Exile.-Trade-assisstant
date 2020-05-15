@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:GUI.Styles">
+
+    <FontFamily x:Key="FontingSmallCaps">Resources/Fonts/#Fontin SmallCaps</FontFamily>
+
+    <SolidColorBrush x:Key="DarkBrownColor" Color="#1E1111"/>
+    <SolidColorBrush x:Key="BrownButtonColor" Color="#371200"/>
+    <SolidColorBrush x:Key="BorderColor" Color="Silver"/>
+
+    <Sys:Double x:Key="FontSize">15</Sys:Double>
+    <Thickness x:Key="BorderThickness" >1</Thickness>
+    
+</ResourceDictionary>

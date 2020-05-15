@@ -5,125 +5,22 @@
              xmlns:local="clr-namespace:GUI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        
-        <FontFamily x:Key="MainFont">Resources/Fonts/#Fontin SmallCaps</FontFamily>
+        <ResourceDictionary>
+            <!--Font doesnt work from anywhere else. Cant figure why-->
+            <FontFamily x:Key="FontingSmallCaps">Resources/Fonts/#Fontin SmallCaps</FontFamily>
 
-        <SolidColorBrush x:Key="MainDarkBrownColor" Color="#1E1111"/>
-        <SolidColorBrush x:Key="BrownButtonColor" Color="#371200"/>
-        <SolidColorBrush x:Key="MainBorderColor" Color="Silver"/>
+            <ResourceDictionary.MergedDictionaries>
+                <!--Constants go first-->
+                <ResourceDictionary Source="Styles/Constants.xaml"/>
 
-        <Style x:Key="TextBoxStyle" TargetType="TextBox">
-            <Setter Property="FontFamily" Value="Resources/Fonts/#Fontin SmallCaps"/>
-            <Setter Property="FontSize" Value="25"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Background" Value="AliceBlue"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Height" Value="auto"/>
-            <Setter Property="BorderBrush" Value="{StaticResource MainBorderColor}"/>
-        </Style>
-
-        <Style x:Key="TabControlStyle" TargetType="TabControl">
-            <Setter Property="FontFamily" Value="Resources/Fonts/#Fontin SmallCaps"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Margin" Value="-2,-2,0,0"/>
-            <Setter Property="BorderBrush" Value="{StaticResource MainBorderColor}"/>
-            <Setter Property="Background" Value="{StaticResource MainDarkBrownColor}"/>
-        </Style>
-
-        <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="FontFamily" Value="Resources/Fonts/#Fontin SmallCaps"/>
-            <Setter Property="FontSize" Value="25"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="{StaticResource BrownButtonColor}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource MainBorderColor}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <Style x:Key="ComboboxStyle" TargetType="ComboBox">
-            <Setter Property="FontFamily" Value="Resources/Fonts/#Fontin SmallCaps"/>
-            <Setter Property="FontSize" Value="25"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="{StaticResource BrownButtonColor}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource MainBorderColor}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <Style x:Key="BorderStyle" TargetType="Border">
-            <Setter Property="BorderBrush" Value="{StaticResource MainBorderColor}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <Style x:Key="DataGridStyle" TargetType="DataGrid">
-            <Setter Property="AutoGenerateColumns" Value="False"/>
-            <Setter Property="FlowDirection" Value="LeftToRight"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="MinColumnWidth" Value="100"/>
-            <Setter Property="CanUserResizeColumns" Value="False"/>
-            <Setter Property="CanUserResizeRows" Value="False"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="Margin" Value="-2"/>
-            <Setter Property="BorderBrush" Value="{StaticResource MainBorderColor}"/>
-        </Style>
-
-        <TabControl x:Key="TabControlStyle2">
-            <TabControl.Template>
-                <ControlTemplate TargetType="TabControl">
-                    <StackPanel>
-                        <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
-                            <TabPanel x:Name="HeaderPanel"
-                              Panel.ZIndex ="1" 
-                              KeyboardNavigation.TabIndex="1"
-                              Grid.Column="0"
-                              Grid.Row="0"
-                              Margin="2,2,2,0"
-                              IsItemsHost="true"/>
-                        </ScrollViewer>
-                        <ContentPresenter x:Name="PART_SelectedContentHost"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          Margin="{TemplateBinding Padding}"
-                                          ContentSource="SelectedContent"/>
-                    </StackPanel>
-                </ControlTemplate>
-            </TabControl.Template>
-        </TabControl>
-        
-        <!--#region Global styles-->
-        <Style TargetType="TabItem" x:Name="Global">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="MinWidth" Value="100"/>
-            <Setter Property="MinHeight" Value="40"/>
-            <Setter Property="Header" Value="No info"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TabItem">
-                        <Grid>
-                            <Border Name="Border" Background="{StaticResource BrownButtonColor}" BorderBrush="White" BorderThickness="0,0,3,3 " CornerRadius="0, 0, 10, 0">
-                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Right" ContentSource="Header" Margin="12,2,12,2" RecognizesAccessKey="True"/>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <!-- selection color -->
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="Green"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="{StaticResource BrownButtonColor}"/>
-                            </Trigger>
-                            <!-- is mouse over color -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="Green"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--#endregion Global styles-->
+                <ResourceDictionary Source="Styles/Button.xaml"/>
+                <ResourceDictionary Source="Styles/ComboBox.xaml"/>
+                <ResourceDictionary Source="Styles/ComboBoxItem.xaml"/>
+                <ResourceDictionary Source="Styles/DataGrid.xaml"/>
+                <ResourceDictionary Source="Styles/TabControl.xaml"/>
+                <ResourceDictionary Source="Styles/TabItem.xaml"/>
+                <ResourceDictionary Source="Styles/TextBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -6,98 +6,123 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         Title="Trade assisstant" MinHeight="480" MinWidth="640"
-        d:DesignWidth="1290" d:DesignHeight="728">
-    <Grid Background="{StaticResource MainDarkBrownColor}">
+        d:DesignWidth="1290" d:DesignHeight="728"
+        FontFamily="{StaticResource FontingSmallCaps}"
+        FontSize="20"
+        FontStretch="UltraCondensed">
+    <Grid Background="{StaticResource DarkBrownColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TabControl Style="{StaticResource TabControlStyle}"
-                    x:Name="MainTabControl"
-                    TabStripPlacement="Right"
-                    FlowDirection="RightToLeft">
-            <TabControl.Template>
-                <ControlTemplate TargetType="TabControl">
-                    <Grid FlowDirection="LeftToRight">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <ScrollViewer Grid.Column="0"
-                                      VerticalScrollBarVisibility="Visible"
-                                      FlowDirection="RightToLeft">
-                            <TabPanel x:Name="HeaderPanel"
-                                      Margin="0"
-                                      IsItemsHost="true"
-                                      MaxWidth="200"/>
-                        </ScrollViewer>
-                        <ContentPresenter Grid.Column="1"
-                                          x:Name="PART_SelectedContentHost"
-                                          ContentSource="SelectedContent"/>
-                    </Grid>
-                    
-
-                </ControlTemplate>
-            </TabControl.Template>
+        <TabControl x:Name="MainTabControl">
             
         </TabControl>
-
         <!--region Down definition-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="150" MaxWidth="300"/>
-                <ColumnDefinition MinWidth="40" MaxWidth="80"/>
-                <ColumnDefinition MinWidth="200" MaxWidth="400"/>
-                <ColumnDefinition MinWidth="50" MaxWidth="100"/>
-                <ColumnDefinition MinWidth="50" MaxWidth="100"/>
-                <ColumnDefinition MinWidth="50"/>
+                <ColumnDefinition MinWidth="200" MaxWidth="300"/>
+                <ColumnDefinition MinWidth="150" MaxWidth="300"/>
+                <ColumnDefinition MinWidth="150" MaxWidth="300"/>
+                <ColumnDefinition MinWidth="150" MaxWidth="300"/>
+                <ColumnDefinition MinWidth="150" MaxWidth="300"/>
+                <ColumnDefinition MinWidth="150" MaxWidth="300"/>
             </Grid.ColumnDefinitions>
 
             <!--Used to fill without any problem. Easier than listbox. no need ot bind-->
-            <DockPanel x:Name="ListBox"
-                       Grid.Row="0"
-                       Grid.Column="0"
-                       Background="{StaticResource BrownButtonColor}"
-                       Width="{Binding }">
-                <Border Style="{StaticResource BorderStyle}">
-                    <TextBox x:Name="EnterPoEID"
-                             Text="{Binding Path=GuiData.Poesessid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource TextBoxStyle}"
-                             GotFocus="EnterPoEID_GotFocus"
-                             LostFocus="EnterPoEID_LostFocus">
-                    </TextBox>
-                </Border>
-            </DockPanel>
-
-            <Button x:Name="GoButton"
-                    Grid.Column="1"
-                    Grid.Row="0"
-                    Content="Go"
-                    Style="{StaticResource ButtonStyle}" Click="GoButton_Click"/>
-
-            <ComboBox Grid.Column="2"
-                      Grid.Row="0"
-                      Style="{StaticResource ComboboxStyle}">
-                
-                <ComboBoxItem Content="No Item"
-                              Height="50"/>
+            <Border BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Background="{StaticResource BrownButtonColor}">
+                <TextBox Name="EnterPoEID"
+                         Margin="3"
+                         FontSize="15"
+                         Text="{Binding Path=GuiData.Poesessid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="EnterPoEID_GotFocus"
+                         LostFocus="EnterPoEID_LostFocus">
+                </TextBox>
+            </Border>
+            <ComboBox Grid.Column="1" Grid.Row="2"> 
+                <ComboBoxItem Content="No Item" Height="30"/>
+                <ComboBoxItem Content="No Item" Height="30"/>
+                <ComboBoxItem Content="Select league" Height="30" IsSelected="True"/>
             </ComboBox>
 
+            <Button x:Name="GetItems"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Content="Get items"
+                    Click="Get_items_Click">
+            </Button>
+            
             <Button Name="RefreshButton"
-                    Grid.Column="3"
+                    Grid.Column="4"
                     Grid.Row="0"
-                    Content="Refresh"
-                    Style="{StaticResource ButtonStyle}"/>
+                    Content="Refresh"/>
 
-            <ComboBox Name="RefreshEveryButton"
-                      Grid.Column="4"
-                      Grid.Row="0">
-                <ComboBoxItem Content="1 minute" IsSelected="True"/>
-                <ComboBoxItem Content="2 minute" IsSelected="False"/>
-                <ComboBoxItem Content="3 minute" IsSelected="False"/>
+            <Button Name="UpdateUi" Grid.Column="3" Content="Update UI" Click="Update_UI_Click"/>
+
+            <ComboBox Name="RefreshEveryButton"  Grid.Column="5" Grid.Row="0">
                 <ComboBoxItem Content="5 minute" IsSelected="False"/>
+                <ComboBoxItem Content="3 minute" IsSelected="False"/>
+                <ComboBoxItem Content="2 minute" IsSelected="False"/>
+                <ComboBoxItem Content="1 minute" IsSelected="True"/>
             </ComboBox>
+
+            <ToggleButton x:Name="Settings" Grid.Column="6"
+                          ClickMode="Press"
+                          Background="{StaticResource BrownButtonColor}" 
+                          BorderBrush="{StaticResource BorderColor}" 
+                          BorderThickness="{StaticResource BorderThickness}">
+
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border x:Name="Border" 
+                                            Background="{StaticResource BrownButtonColor}"
+                                            BorderBrush="{StaticResource BorderColor}"
+                                            BorderThickness="{StaticResource BorderThickness}">
+                                        <ContentPresenter Content="Settings" 
+                                                          VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsFocused" Value="False">
+                                            <Setter Property="IsChecked" Value="False"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" TargetName="Border" Value="Gray"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ToggleButton.Style>
+                
+                <Popup x:Name="Pop"
+                       Placement="Top"
+                       StaysOpen="False"
+                       PopupAnimation="None"
+                       PlacementTarget="{Binding ElementName=Settings}"
+                       Width="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton}, Path=ActualWidth}"
+                       IsOpen="{Binding ElementName=Settings, Path=IsChecked}">
+                    <Border Background="{StaticResource BrownButtonColor}"
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="{StaticResource BorderThickness}">
+                        <StackPanel>
+                            <TextBlock Text="fsdfsdf" TextAlignment="Center"/>
+                            <TextBlock Text="fsdfsdf" TextAlignment="Center"/>
+                            <TextBlock Text="fsdfsdf" TextAlignment="Center"/>
+                            <TextBlock Text="fsdfsdf" TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+            </ToggleButton>
+
         </Grid>
         <!--#endregion-->
     </Grid>

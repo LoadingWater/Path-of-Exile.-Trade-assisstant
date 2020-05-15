@@ -8,7 +8,6 @@ using Backend.APIFunctions;
 using Backend.Models;
 using System.Net;
 using System.Windows;
-using Backend.Models;
 using Backend.Database;
 using System.Data.Entity;
 
@@ -20,6 +19,7 @@ namespace Backend.ApplicationViewModel
         private CustomClient _customClient;
         private DatabaseContext _databaseContext;
         private DatabaseFunctions _databaseFunctions;
+        private GuiFunctions _guIFunctions;
 
         #region Commands declaration
         #endregion
@@ -34,11 +34,14 @@ namespace Backend.ApplicationViewModel
             _databaseContext.Tabs.Load();
             _databaseContext.Items.Load();
             _databaseFunctions = new DatabaseFunctions();
+            _guIFunctions = new GuiFunctions();
         }
         public GuiData           GuiData           { get { return _guiData; } }
         public CustomClient      CustomClient      { get { return _customClient; } }
         public DatabaseContext   DatabaseContext   { get { return _databaseContext; } set { _databaseContext = value; } }
         public DatabaseFunctions DatabaseFunctions { get { return _databaseFunctions; } }
+        public GuiFunctions      GuiFunctions      { get { return _guIFunctions; } }
+       
         #region Commands implementation
         #endregion
 

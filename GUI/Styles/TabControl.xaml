@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:GUI.Styles">
+
+    <Style TargetType="TabControl">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="TabStripPlacement" Value="Right"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid Background="{StaticResource DarkBrownColor}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Visible" FlowDirection="RightToLeft">
+                            <TabPanel IsItemsHost="True"/>
+                        </ScrollViewer>
+                        <ContentPresenter x:Name="Pre" Grid.Column="1" ContentSource="SelectedContent">
+                        </ContentPresenter>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>
