@@ -9,7 +9,8 @@
         d:DesignWidth="1290" d:DesignHeight="728"
         FontFamily="{StaticResource FontingSmallCaps}"
         FontSize="20"
-        FontStretch="UltraCondensed">
+        FontStretch="UltraCondensed"
+        LocationChanged="Window_LocationChanged">
     <Grid Background="{StaticResource DarkBrownColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -71,6 +72,8 @@
 
             <ToggleButton x:Name="Settings" Grid.Column="6"
                           ClickMode="Press"
+                          LostFocus="Settings_LostFocus"
+                          GotFocus="Settings_GotFocus"
                           Background="{StaticResource BrownButtonColor}" 
                           BorderBrush="{StaticResource BorderColor}" 
                           BorderThickness="{StaticResource BorderThickness}">
@@ -90,9 +93,6 @@
                                                           HorizontalAlignment="Center"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
-                                        <Trigger Property="IsFocused" Value="False">
-                                            <Setter Property="IsChecked" Value="False"/>
-                                        </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Background" TargetName="Border" Value="Gray"/>
                                         </Trigger>
@@ -100,6 +100,11 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=Settings}"/>
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                 </ToggleButton.Style>
                 
@@ -113,11 +118,22 @@
                     <Border Background="{StaticResource BrownButtonColor}"
                             BorderBrush="{StaticResource BorderColor}"
                             BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <TextBlock Text="fsdfsdf" TextAlignment="Center"/>
-                            <TextBlock Text="fsdfsdf" TextAlignment="Center"/>
-                            <TextBlock Text="fsdfsdf" TextAlignment="Center"/>
-                            <TextBlock Text="fsdfsdf" TextAlignment="Center"/>
+                        <StackPanel Background="Red">
+                            <StackPanel.Resources>
+                                <Style x:Key="Check" TargetType="CheckBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Gray"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Resources>
+                            <Button Background="White" Content="sfsdfsdfsdfsd" />
+                            <CheckBox Content="First" IsChecked="True" Style="{StaticResource Check}">
+
+                                
+                            </CheckBox>
+                            <CheckBox Content="First" IsChecked="True" Style="{StaticResource Check}"/>
                         </StackPanel>
                     </Border>
                 </Popup>

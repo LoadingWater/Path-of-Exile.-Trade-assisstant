@@ -14,5 +14,6 @@ namespace Backend.Database
         public int    ItemFrameType { get; set; }
         public string ItemIconAddress { get; set; }
         public string TabId { get; set; }
+        public string ItemAffixes { get; set; }
     }
 }

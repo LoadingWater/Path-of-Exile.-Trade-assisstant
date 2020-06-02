@@ -5,7 +5,7 @@ using System.Windows.Data;
 using Backend.Database;
 using System.Linq;
 using System.Windows.Media;
-
+using System.Windows;
 
 namespace Backend.ApplicationViewModel
 {
@@ -13,51 +13,68 @@ namespace Backend.ApplicationViewModel
     {
         public void CreateDataGrid(DatabaseContext database, TabControl mainTabControl)
         {
-            int numberOfTabs = database.Tabs.Count((x) => x.TabId != null);
-
-            for (int tabNumber = 0; tabNumber < numberOfTabs; tabNumber++)
+            try
             {
-                //Create DataGrid items source
-                List<DataGridItemModel> dataGridItems = new List<DataGridItemModel>();
-                var tab = database.Tabs.Where((x) => x.TabIndex == tabNumber).First();
-                var itemsInATab = database.Items.Where((x) => x.TabId == tab.TabId).ToList();
-                foreach (var item in itemsInATab)
-                {
-                    dataGridItems.Add(new DataGridItemModel() { ItemFrameType = item.ItemFrameType, ItemIconAddress = item.ItemIconAddress, ItemId = item.ItemId, ItemName = item.ItemName, ItemNote = item.ItemNote, TabId = tab.TabId });
-                }
-                //Create DataGrid for every tab
-                if (dataGridItems.Count != 0)
-                {
-                    DataGrid dataGrid = new DataGrid() { ItemsSource = dataGridItems };
-                    TabItem tabItem = new TabItem() { Header = tab.TabName, Content = dataGrid, Background = GetTabItemColour(tab) };
+                int numberOfTabs = database.Tabs.Count((x) => x.TabId != null);
 
-                    dataGrid.Columns.Add(CreateDataGridColumn("Name", "ItemName"));
-                    dataGrid.Columns.Add(CreateDataGridColumn("Note", "ItemNote"));
-
-                    mainTabControl.Items.Add(tabItem);
-                }
-                
-                /*Style cellStyle = new Style();
-                Setter s = new Setter();
-                s.Property = DataGridCell.BackgroundProperty;
-                s.Value = Brushes.Red;
-                cellStyle.Setters.Add(s);
-                nameColumn.CellStyle = cellStyle;*/
-                /*dataGrid.SelectAllCells();
-                foreach (var cell in dataGrid.SelectedCells)
+                for (int tabNumber = 0; tabNumber < numberOfTabs; tabNumber++)
                 {
-                    DataGridItemModel item = (DataGridItemModel)cell.Item;
-                    if (item.ItemFrameType == 0)
+                    //Create DataGrid items source
+                    List<DataGridItemModel> dataGridItems = new List<DataGridItemModel>();
+                    var tab = database.Tabs.Where((x) => x.TabIndex == tabNumber).First();
+                    var itemsInATab = database.Items.Where((x) => x.TabId == tab.TabId).ToList();
+                    foreach (var item in itemsInATab)
                     {
-                        Style cellStyle = new Style();
-                        Setter s = new Setter();
-                        s.Property = DataGridCell.BackgroundProperty;
-                        s.Value = Brushes.Red;
-                        cellStyle.Setters.Add(s);
-                        cell.Column.CellStyle = cellStyle;
+                        dataGridItems.Add(new DataGridItemModel()
+                        {
+                            ItemFrameType = item.ItemFrameType,
+                            ItemIconAddress = item.ItemIconAddress,
+                            ItemId = item.ItemId,
+                            ItemName = item.ItemName,
+                            ItemNote = item.ItemNote,
+                            TabId = tab.TabId,
+                        });
                     }
-                }*/
+                    //Create DataGrid for every tab
+                    if (dataGridItems.Count != 0)
+                    {
+                        DataGrid dataGrid = new DataGrid() { ItemsSource = dataGridItems };
+                        TabItem tabItem = new TabItem() { Header = tab.TabName, Content = dataGrid, Background = GetTabItemColour(tab) };
+
+                        dataGrid.Columns.Add(CreateDataGridColumn("Name", "ItemName"));
+                        dataGrid.Columns.Add(CreateDataGridColumn("Note", "ItemNote"));
+
+                        mainTabControl.Items.Add(tabItem);
+                    }
+
+                    /*Style cellStyle = new Style();
+                    Setter s = new Setter();
+                    s.Property = DataGridCell.BackgroundProperty;
+                    s.Value = Brushes.Red;
+                    cellStyle.Setters.Add(s);
+                    nameColumn.CellStyle = cellStyle;*/
+                    /*dataGrid.SelectAllCells();
+                    foreach (var cell in dataGrid.SelectedCells)
+                    {
+                        DataGridItemModel item = (DataGridItemModel)cell.Item;
+                        if (item.ItemFrameType == 0)
+                        {
+                            Style cellStyle = new Style();
+                            Setter s = new Setter();
+                            s.Property = DataGridCell.BackgroundProperty;
+                            s.Value = Brushes.Red;
+                            cellStyle.Setters.Add(s);
+                            cell.Column.CellStyle = cellStyle;
+                        }
+                    }*/
+                }
             }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
+            
         }
 
         private DataGridTextColumn CreateDataGridColumn(string columnName, string propertyToBindHeaderTo)

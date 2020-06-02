@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Threading.Tasks;
 
+
 namespace GUI
 {
     /// <summary>
@@ -78,6 +79,24 @@ namespace GUI
         private void Update_UI_Click(object sender, RoutedEventArgs e)
         {
             applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl);
+        }
+
+        private void Window_LocationChanged(object sender, EventArgs e)
+        {
+            //NOTE: Why does it work with any offset change?
+            var originalOffset = Pop.HorizontalOffset;
+            Pop.HorizontalOffset += Pop.HorizontalOffset + 1;
+            Pop.HorizontalOffset = originalOffset;
+        }
+
+        private void Settings_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Unfocused");
+        }
+
+        private void Settings_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Focused");
         }
     }
 }

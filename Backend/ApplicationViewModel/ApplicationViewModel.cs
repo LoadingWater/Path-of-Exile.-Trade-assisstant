@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Backend.Classes;
-using Backend.APIFunctions;
-using Backend.Models;
 using System.Net;
-using System.Windows;
 using Backend.Database;
 using System.Data.Entity;
+
 
 namespace Backend.ApplicationViewModel
 {
