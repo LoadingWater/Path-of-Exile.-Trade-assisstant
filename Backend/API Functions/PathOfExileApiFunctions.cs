@@ -12,7 +12,7 @@ namespace Backend.APIFunctions
 {
     public static class PathOfExileApiFunctions
     {
-        public static async Task<string> GetItemsInATabAsStringAsync(CustomClient client, PlayerInfo playerInfo, int tabNumber)
+        public static async Task<string> GetItemsInOneTabAsStringAsync(CustomClient client, PlayerInfo playerInfo, int tabNumber)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Backend.APIFunctions
             for (int i = 0; i < maxRequests; i++)
             {
                 int tmp = i;
-                tabs.Add(Task.Run(() => GetItemsInATabAsStringAsync(client, playerInfo, tmp)));
+                tabs.Add(Task.Run(() => GetItemsInOneTabAsStringAsync(client, playerInfo, tmp)));
             }
             await Task.WhenAll(tabs);
             return tabs;
@@ -52,7 +52,22 @@ namespace Backend.APIFunctions
 
             return stashModel.numTabs;
         }
-        #region Private functions
-        #endregion
+        public static async Task<List<LeagueModel>> GetLeaguesListAsync(CustomClient client)
+        {
+            try
+            {
+                Uri address = new Uri(client.HttpClient.BaseAddress, $"api/leagues");
+                string response = await client.HttpClient.GetStringAsync(address);
+                //LATER: create converter?
+                var result = JsonConvert.DeserializeObject<List<LeagueModel>>(response);
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return null;
+            }
+        }
     }
 }

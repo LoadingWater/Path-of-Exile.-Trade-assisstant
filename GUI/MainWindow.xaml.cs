@@ -27,7 +27,7 @@ namespace GUI
             this.DataContext = applicationViewModel;
         }
 
-        #region EnterPoEID
+        #region EnterPoEID textbox
         private void EnterPoEID_GotFocus(object sender, RoutedEventArgs e)
         {
             applicationViewModel.GuiData.Poesessid = "";
@@ -42,7 +42,7 @@ namespace GUI
         }
         #endregion
 
-        #region GetItems
+        #region GetItems button
         private async void Get_items_Click(object sender, RoutedEventArgs e)
         {
 
@@ -76,11 +76,14 @@ namespace GUI
         }
         #endregion
 
+        #region UpdateUiDatagrid
         private void Update_UI_Click(object sender, RoutedEventArgs e)
         {
             applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl);
         }
+        #endregion
 
+        #region Move settings popup when window location changed
         private void Window_LocationChanged(object sender, EventArgs e)
         {
             //NOTE: Why does it work with any offset change?
@@ -88,15 +91,13 @@ namespace GUI
             Pop.HorizontalOffset += Pop.HorizontalOffset + 1;
             Pop.HorizontalOffset = originalOffset;
         }
+        #endregion
 
-        private void Settings_LostFocus(object sender, RoutedEventArgs e)
+        #region Leagues Combobox
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Unfocused");
+            applicationViewModel.GuiData.Leagues = await PathOfExileApiFunctions.GetLeaguesListAsync(applicationViewModel.CustomClient);
         }
-
-        private void Settings_GotFocus(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("Focused");
-        }
+        #endregion
     }
 }

@@ -10,17 +10,22 @@
         FontFamily="{StaticResource FontingSmallCaps}"
         FontSize="20"
         FontStretch="UltraCondensed"
-        LocationChanged="Window_LocationChanged">
+        LocationChanged="Window_LocationChanged"
+        Loaded="Window_Loaded">
+    
     <Grid Background="{StaticResource DarkBrownColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TabControl x:Name="MainTabControl">
-            
-        </TabControl>
+        
+        <!--region TabControl-->
+        <TabControl x:Name="MainTabControl"/>
+        <!--endregion TabControl-->
+
         <!--region Down definition-->
         <Grid Grid.Row="1">
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="150" MaxWidth="300"/>
                 <ColumnDefinition MinWidth="200" MaxWidth="300"/>
@@ -31,7 +36,7 @@
                 <ColumnDefinition MinWidth="150" MaxWidth="300"/>
             </Grid.ColumnDefinitions>
 
-            <!--Used to fill without any problem. Easier than listbox. no need ot bind-->
+            <!--region EnterPoeID-->
             <Border BorderBrush="{StaticResource BorderColor}"
                     BorderThickness="{StaticResource BorderThickness}"
                     Background="{StaticResource BrownButtonColor}">
@@ -43,37 +48,49 @@
                          LostFocus="EnterPoEID_LostFocus">
                 </TextBox>
             </Border>
-            <ComboBox Grid.Column="1" Grid.Row="2"> 
-                <ComboBoxItem Content="No Item" Height="30"/>
-                <ComboBoxItem Content="No Item" Height="30"/>
-                <ComboBoxItem Content="Select league" Height="30" IsSelected="True"/>
-            </ComboBox>
+            <!--endregion EnterPoeID-->
 
+            <!--region Leagues-->
+            <ComboBox Name="Leagues" 
+                      Grid.Column="1" 
+                      Grid.Row="2"
+                      ItemsSource="{Binding Path=GuiData.Leagues, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedIndex="0">
+            </ComboBox>
+            <!--endregion Leagues-->
+
+            <!--region GetItems-->
             <Button x:Name="GetItems"
                     Grid.Column="2"
                     Grid.Row="0"
                     Content="Get items"
                     Click="Get_items_Click">
             </Button>
-            
+            <!--endregion GetItems-->
+
+            <!--region RefreshButton-->
             <Button Name="RefreshButton"
                     Grid.Column="4"
                     Grid.Row="0"
                     Content="Refresh"/>
+            <!--endregion RefreshButton-->
 
+            <!--region UpdateUi-->
             <Button Name="UpdateUi" Grid.Column="3" Content="Update UI" Click="Update_UI_Click"/>
+            <!--endregion UpdateUi-->
 
+            <!--region RefreshEveryButton-->
             <ComboBox Name="RefreshEveryButton"  Grid.Column="5" Grid.Row="0">
                 <ComboBoxItem Content="5 minute" IsSelected="False"/>
                 <ComboBoxItem Content="3 minute" IsSelected="False"/>
                 <ComboBoxItem Content="2 minute" IsSelected="False"/>
                 <ComboBoxItem Content="1 minute" IsSelected="True"/>
             </ComboBox>
+            <!--endregion RefreshEveryButton-->
 
+            <!--region Settings-->
             <ToggleButton x:Name="Settings" Grid.Column="6"
                           ClickMode="Press"
-                          LostFocus="Settings_LostFocus"
-                          GotFocus="Settings_GotFocus"
                           Background="{StaticResource BrownButtonColor}" 
                           BorderBrush="{StaticResource BorderColor}" 
                           BorderThickness="{StaticResource BorderThickness}">
@@ -107,7 +124,7 @@
                         </Style.Triggers>
                     </Style>
                 </ToggleButton.Style>
-                
+                <!--region Popup-->
                 <Popup x:Name="Pop"
                        Placement="Top"
                        StaysOpen="False"
@@ -129,17 +146,15 @@
                                 </Style>
                             </StackPanel.Resources>
                             <Button Background="White" Content="sfsdfsdfsdfsd" />
-                            <CheckBox Content="First" IsChecked="True" Style="{StaticResource Check}">
-
-                                
-                            </CheckBox>
+                            <CheckBox Content="First" IsChecked="True" Style="{StaticResource Check}"/>
                             <CheckBox Content="First" IsChecked="True" Style="{StaticResource Check}"/>
                         </StackPanel>
                     </Border>
                 </Popup>
+                <!--endregion Popup-->
             </ToggleButton>
-
+            <!--endregion Settings-->
         </Grid>
-        <!--#endregion-->
+        <!--endregion Down definition-->
     </Grid>
 </Window>

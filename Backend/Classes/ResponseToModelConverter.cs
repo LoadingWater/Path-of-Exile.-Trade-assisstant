@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 
 namespace Backend.Classes
 {
+    //LATER: if i have one converter i have to have converter for every api call?
+    //Rename to itemModelConverter?
     public static class ResponseToModelConverter
     {
         public static List<ItemModel.RootObject> ConvertAllResponses(List<Task<string>> responses)

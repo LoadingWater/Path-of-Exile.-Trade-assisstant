@@ -3,18 +3,19 @@ using Backend.Classes;
 using System.Net;
 using Backend.Database;
 using System.Data.Entity;
+using Backend.APIFunctions;
 
 
 namespace Backend.ApplicationViewModel
 {
     public class ApplicationViewModel
     {
-        private GuiData _guiData;
-        private CustomClient _customClient;
-        private DatabaseContext _databaseContext;
+        private GuiData           _guiData;
+        private CustomClient      _customClient;
+        private DatabaseContext   _databaseContext;
         private DatabaseFunctions _databaseFunctions;
-        private GuiFunctions _guIFunctions;
-
+        private GuiFunctions      _guIFunctions;
+            
         #region Commands declaration
         #endregion
 

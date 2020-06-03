@@ -60,6 +60,7 @@
     <Compile Include="Models\DataGridItemModel.cs" />
     <Compile Include="API Functions\PathOfExileApiFunctions.cs" />
     <Compile Include="Models\ItemModel.cs" />
+    <Compile Include="Models\LeagueModel.cs" />
     <Compile Include="Models\StashModel.cs" />
   </ItemGroup>
   <ItemGroup>

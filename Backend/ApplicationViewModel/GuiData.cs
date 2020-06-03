@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Backend.Models;
 
 
 
@@ -11,6 +13,7 @@ namespace Backend.ApplicationViewModel
         private string _poesessid = "Enter sessid";
         private Stopwatch _cooldown;
         private bool _isPopOpen = false;
+        private List<LeagueModel> _leagues;
 
         public string Poesessid
         {
@@ -34,9 +37,27 @@ namespace Backend.ApplicationViewModel
             }
             set { _cooldown = value; }
         }
-
-        public bool IsPopOpen { get { return _isPopOpen; } set { _isPopOpen = value; OnPropertyChanged(); } }
-
+        public bool IsPopOpen
+        { 
+            get 
+            { 
+                return _isPopOpen; 
+            } 
+            set 
+            { 
+                _isPopOpen = value; 
+                OnPropertyChanged(); 
+            } 
+        }
+        public List<LeagueModel> Leagues
+        {
+            get { return _leagues; }
+            set 
+            { 
+                _leagues = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
