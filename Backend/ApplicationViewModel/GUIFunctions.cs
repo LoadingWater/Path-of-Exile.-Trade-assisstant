@@ -33,6 +33,7 @@ namespace Backend.ApplicationViewModel
                             ItemName = item.ItemName,
                             ItemNote = item.ItemNote,
                             TabId = tab.TabId,
+                            ItemAffixes = item.ItemAffixes
                         });
                     }
                     //Create DataGrid for every tab
@@ -43,6 +44,7 @@ namespace Backend.ApplicationViewModel
 
                         dataGrid.Columns.Add(CreateDataGridColumn("Name", "ItemName"));
                         dataGrid.Columns.Add(CreateDataGridColumn("Note", "ItemNote"));
+                        dataGrid.Columns.Add(CreateDataGridColumn("ItemAffixes", "ItemAffixes"));
 
                         mainTabControl.Items.Add(tabItem);
                     }

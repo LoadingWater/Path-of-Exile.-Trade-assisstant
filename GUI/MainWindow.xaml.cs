@@ -50,12 +50,16 @@ namespace GUI
             {
                 try
                 {
+                    //Start timer. 40 requests per minute. 60 sec cooldown
                     applicationViewModel.GuiData.Cooldown.Restart();
-
+                    //Init viewmodel
                     applicationViewModel.CustomClient.CookieContainer.Add(new Uri("https://pathofexile.com/"), new Cookie("POESESSID", applicationViewModel.GuiData.Poesessid));
+                    //Get responses and convert them
                     var responses = await PathOfExileApiFunctions.GetItemsInAllStashTabsAsStringAsync(applicationViewModel.CustomClient, new PlayerInfo("Hardcore", "GoStormUp"));
                     var models = ResponseToModelConverter.ConvertAllResponses(responses);
+                    //Update database
                     applicationViewModel.DatabaseFunctions.UpdateDatabase(models, applicationViewModel.DatabaseContext);
+                    //Clear previous datagrid and create a new one
                     MainTabControl.Items.Clear();
                     applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl);
                     //97dfc9145fbfc40c9e19031c4e1b08ba

@@ -14,6 +14,7 @@ namespace Backend.ApplicationViewModel
         private Stopwatch _cooldown;
         private bool _isPopOpen = false;
         private List<LeagueModel> _leagues;
+        private bool _isGetItemsAvailable = false;
 
         public string Poesessid
         {
@@ -55,9 +56,23 @@ namespace Backend.ApplicationViewModel
             set 
             { 
                 _leagues = value;
+                IsGetItemsAvailable = true;
                 OnPropertyChanged();
             }
         }
+        public bool IsGetItemsAvailable
+        {
+            get
+            {
+                return _isGetItemsAvailable;
+            }
+            set
+            {
+                _isGetItemsAvailable = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

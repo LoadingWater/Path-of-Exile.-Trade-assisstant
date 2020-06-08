@@ -147,7 +147,7 @@ namespace Backend.Database
                         for (int i = 0; i < itemFromRequest.explicitMods.Count; i++)
                         {
                             //create one string from mods
-                            itemAffixes += $"{itemFromRequest.explicitMods[i]} ";
+                            itemAffixes += $"/{itemFromRequest.explicitMods[i]}/\n";
                         }
                     }
                 }
@@ -173,7 +173,7 @@ namespace Backend.Database
                         property.name = property.name.Replace("%1", property.values[1][0].ToString());
                     }
                     //create string of mods
-                    itemAffixes += $"\"{property.name}\" ";
+                    itemAffixes += $"|{property.name}|\n";
                 }
             }
             return itemAffixes;

@@ -8,8 +8,7 @@
         Title="Trade assisstant" MinHeight="480" MinWidth="640"
         d:DesignWidth="1290" d:DesignHeight="728"
         FontFamily="{StaticResource FontingSmallCaps}"
-        FontSize="20"
-        FontStretch="UltraCondensed"
+        FontSize="{StaticResource FontSize}"
         LocationChanged="Window_LocationChanged"
         Loaded="Window_Loaded">
     
@@ -60,10 +59,11 @@
             <!--endregion Leagues-->
 
             <!--region GetItems-->
-            <Button x:Name="GetItems"
+            <Button Name="GetItems"
                     Grid.Column="2"
                     Grid.Row="0"
                     Content="Get items"
+                    IsEnabled="{Binding Path=GuiData.IsGetItemsAvailable, Mode=OneWay}"
                     Click="Get_items_Click">
             </Button>
             <!--endregion GetItems-->
