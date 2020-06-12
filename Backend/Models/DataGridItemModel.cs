@@ -9,9 +9,18 @@
         public string ItemIconAddress { get; set; }
         public string TabId { get; set; }
         public string ItemAffixes { get; set; }
+        public string ElapsedTime { get; set; }
+        public string ElapsedTimeFromTheLastPriceChange { get; set; }
         public override string ToString()
         {
-            return $"ItemId: {ItemId}\nItemName: {ItemName}\nItemNote: {ItemNote}\nItemFrameType: {ItemFrameType}\nItemIconAddress: {ItemIconAddress}\nTabId: {TabId}\n";
+            return $"ItemId: {ItemId}\n" +
+                $"ItemName: {ItemName}\n" +
+                $"ItemNote: {ItemNote}\n" +
+                $"ItemFrameType: {ItemFrameType}\n" +
+                $"ItemIconAddress: {ItemIconAddress}\n" +
+                $"TabId: {TabId}\n" +
+                $"ElapsedTime: {ElapsedTime}\n" +
+                $"ElapsedTimeFromTheLastPriceChange: {ElapsedTimeFromTheLastPriceChange}\n";
         }
     }
 }

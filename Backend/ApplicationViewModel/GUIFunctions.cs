@@ -6,6 +6,7 @@ using Backend.Database;
 using System.Linq;
 using System.Windows.Media;
 using System.Windows;
+using System;
 
 namespace Backend.ApplicationViewModel
 {
@@ -15,14 +16,17 @@ namespace Backend.ApplicationViewModel
         {
             try
             {
+                mainTabControl.Items.Clear();
                 int numberOfTabs = database.Tabs.Count((x) => x.TabId != null);
 
+                //Iterate every stash tab 
                 for (int tabNumber = 0; tabNumber < numberOfTabs; tabNumber++)
                 {
                     //Create DataGrid items source
                     List<DataGridItemModel> dataGridItems = new List<DataGridItemModel>();
-                    var tab = database.Tabs.Where((x) => x.TabIndex == tabNumber).First();
-                    var itemsInATab = database.Items.Where((x) => x.TabId == tab.TabId).ToList();
+                    Tab tab = database.Tabs.Where((x) => x.TabIndex == tabNumber).First();
+                    List<Item> itemsInATab = database.Items.Where((x) => x.TabId == tab.TabId).ToList();
+                    //Init all items in a stash tab
                     foreach (var item in itemsInATab)
                     {
                         dataGridItems.Add(new DataGridItemModel()
@@ -33,10 +37,12 @@ namespace Backend.ApplicationViewModel
                             ItemName = item.ItemName,
                             ItemNote = item.ItemNote,
                             TabId = tab.TabId,
-                            ItemAffixes = item.ItemAffixes
+                            ItemAffixes = item.ItemAffixes,
+                            ElapsedTime = FormatDateTime(DateTime.Parse(item.CreationTime).Subtract(DateTime.Now)),
+                            ElapsedTimeFromTheLastPriceChange = FormatDateTime(DateTime.Parse(item.PriceChangedTime).Subtract(DateTime.Now))
                         });
                     }
-                    //Create DataGrid for every tab
+                    //Create DataGrid for every tab if any items
                     if (dataGridItems.Count != 0)
                     {
                         DataGrid dataGrid = new DataGrid() { ItemsSource = dataGridItems };
@@ -44,31 +50,12 @@ namespace Backend.ApplicationViewModel
 
                         dataGrid.Columns.Add(CreateDataGridColumn("Name", "ItemName"));
                         dataGrid.Columns.Add(CreateDataGridColumn("Note", "ItemNote"));
-                        dataGrid.Columns.Add(CreateDataGridColumn("ItemAffixes", "ItemAffixes"));
+                        dataGrid.Columns.Add(CreateDataGridColumn("Item Affixes", "ItemAffixes"));
+                        dataGrid.Columns.Add(CreateDataGridColumn("Elapsed time", "ElapsedTime"));
+                        dataGrid.Columns.Add(CreateDataGridColumn("Price Changed", "ElapsedTimeFromTheLastPriceChange"));
 
                         mainTabControl.Items.Add(tabItem);
                     }
-
-                    /*Style cellStyle = new Style();
-                    Setter s = new Setter();
-                    s.Property = DataGridCell.BackgroundProperty;
-                    s.Value = Brushes.Red;
-                    cellStyle.Setters.Add(s);
-                    nameColumn.CellStyle = cellStyle;*/
-                    /*dataGrid.SelectAllCells();
-                    foreach (var cell in dataGrid.SelectedCells)
-                    {
-                        DataGridItemModel item = (DataGridItemModel)cell.Item;
-                        if (item.ItemFrameType == 0)
-                        {
-                            Style cellStyle = new Style();
-                            Setter s = new Setter();
-                            s.Property = DataGridCell.BackgroundProperty;
-                            s.Value = Brushes.Red;
-                            cellStyle.Setters.Add(s);
-                            cell.Column.CellStyle = cellStyle;
-                        }
-                    }*/
                 }
             }
             catch (System.Exception ex)
@@ -91,6 +78,10 @@ namespace Backend.ApplicationViewModel
         private SolidColorBrush GetTabItemColour(Tab tab)
         {
             return new SolidColorBrush(Color.FromRgb((byte)tab.TabColourRed, (byte)tab.TabColourGreen, (byte)tab.TabColourBlue));
+        }
+        private string FormatDateTime(TimeSpan time)
+        {
+            return $"{time.Days} d/{time.Hours} h/{time.Minutes}m";
         }
     }
 }

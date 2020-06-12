@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Threading.Tasks;
-
+using System.IO;
 
 namespace GUI
 {
@@ -39,6 +39,10 @@ namespace GUI
             {
                 applicationViewModel.GuiData.Poesessid = "Enter sessid";
             }
+            else
+            {
+                
+            }
         }
         #endregion
 
@@ -55,12 +59,11 @@ namespace GUI
                     //Init viewmodel
                     applicationViewModel.CustomClient.CookieContainer.Add(new Uri("https://pathofexile.com/"), new Cookie("POESESSID", applicationViewModel.GuiData.Poesessid));
                     //Get responses and convert them
-                    var responses = await PathOfExileApiFunctions.GetItemsInAllStashTabsAsStringAsync(applicationViewModel.CustomClient, new PlayerInfo("Hardcore", "GoStormUp"));
+                    var responses = await PathOfExileApiFunctions.GetItemsInAllStashTabsAsStringAsync(applicationViewModel.CustomClient, new PlayerInfo(((LeagueModel)Leagues.SelectedItem).Id, "GoStormUp"));
                     var models = ResponseToModelConverter.ConvertAllResponses(responses);
                     //Update database
                     applicationViewModel.DatabaseFunctions.UpdateDatabase(models, applicationViewModel.DatabaseContext);
-                    //Clear previous datagrid and create a new one
-                    MainTabControl.Items.Clear();
+                    //create datagrid
                     applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl);
                     //97dfc9145fbfc40c9e19031c4e1b08ba
                 }
@@ -97,11 +100,28 @@ namespace GUI
         }
         #endregion
 
-        #region Leagues Combobox
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            string path = "userData.txt";
+            if (File.Exists(path))
+            {
+                var fileData = File.ReadAllLines(path);
+                if (fileData.Length != 0)
+                {
+                    //NOTE: both in viewmodel or both in controls?
+                    applicationViewModel.GuiData.Poesessid = fileData[0];
+                    Leagues.SelectedIndex =  int.Parse(fileData[1]);
+                }
+            }
+            //Get list of leagues in leagues combobox
             applicationViewModel.GuiData.Leagues = await PathOfExileApiFunctions.GetLeaguesListAsync(applicationViewModel.CustomClient);
         }
-        #endregion
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            string path = "userData.txt";
+            string[] data = { applicationViewModel.GuiData.Poesessid, Leagues.SelectedIndex.ToString() };
+            File.WriteAllLines(path, data);
+        }
     }
 }

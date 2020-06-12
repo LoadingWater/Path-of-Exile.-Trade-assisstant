@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -13,11 +14,13 @@ namespace Backend.Database
         {
             List<string> idsOfItemsFromRequest = new List<string>();
 
+            //Iterate through stash tabs
             for (int tabNumber = 0; tabNumber < stashTabs.Count; tabNumber++)
             {
                 var tab = stashTabs[tabNumber].tabs[tabNumber];
                 UpdateTabs(database, tab);
 
+                //Iterate through tab items
                 for (int itemNumber = 0; itemNumber < stashTabs[tabNumber].items.Count; itemNumber++)
                 {
                     UpdateItems(database, stashTabs[tabNumber].items[itemNumber], tab);
@@ -33,10 +36,20 @@ namespace Backend.Database
             var tabFromDb = database.Tabs.Find(tabFromRequest.id);
             if (tabFromDb == null)
             {
-                database.Tabs.Add(new Tab() { TabName = tabFromRequest.n, TabIndex = tabFromRequest.i, TabId = tabFromRequest.id, TabColourBlue = tabFromRequest.colour.b, TabColourGreen = tabFromRequest.colour.g, TabColourRed = tabFromRequest.colour.r });
+                //Add new if not found
+                database.Tabs.Add(new Tab() 
+                { 
+                    TabName = tabFromRequest.n, 
+                    TabIndex = tabFromRequest.i, 
+                    TabId = tabFromRequest.id, 
+                    TabColourBlue = tabFromRequest.colour.b, 
+                    TabColourGreen = tabFromRequest.colour.g, 
+                    TabColourRed = tabFromRequest.colour.r 
+                });
             }
             else
             {
+                //Update if found
                 tabFromDb.TabId = tabFromRequest.id;
                 tabFromDb.TabIndex = tabFromRequest.i;
                 tabFromDb.TabName  = tabFromRequest.n;
@@ -52,6 +65,7 @@ namespace Backend.Database
                 var itemFromDb = database.Items.Find(itemFromRequest.id);
                 if (itemFromDb == null)
                 {
+                    //Add new if not found
                     database.Items.Add(new Item()
                     {
                         ItemFrameType = itemFromRequest.frameType,
@@ -60,11 +74,18 @@ namespace Backend.Database
                         ItemName = RetriveItemName(itemFromRequest),
                         ItemNote = itemFromRequest.note,
                         TabId = tabFromRequest.id,
-                        ItemAffixes = RetriveItemAffixes(itemFromRequest)
+                        ItemAffixes = RetriveItemAffixes(itemFromRequest),
+                        CreationTime = DateTime.Now.ToString(),
+                        PriceChangedTime = DateTime.Now.ToString()
                     });
                 }
                 else
                 {
+                    //Update if found
+                    if (itemFromDb.ItemNote != itemFromRequest.note)
+                    {
+                        itemFromDb.PriceChangedTime = DateTime.Now.ToString();
+                    }
                     itemFromDb.ItemId = itemFromRequest.id;
                     itemFromDb.ItemName = RetriveItemName(itemFromRequest);
                     itemFromDb.ItemNote = itemFromRequest.note;
@@ -80,7 +101,6 @@ namespace Backend.Database
                 throw;
             }
         }
-        
         private string RetriveItemName(ItemModel.Item itemFromRequest)
         {
             if (itemFromRequest.name != "")
@@ -92,7 +112,7 @@ namespace Backend.Database
                 return itemFromRequest.typeLine;
             }
         }
-
+        //TODO: Rewrite
         private string RetriveItemAffixes(ItemModel.Item itemFromRequest)
         {
             string itemAffixes = "";
@@ -202,20 +222,27 @@ namespace Backend.Database
         }
         private void RemoveMismatchedItemsFromDB(List<string> idsOfItemsFromRequest, DatabaseContext database)
         {
-            //NOTE: do this with sql
+            //NOTE: do this with sql?
+            //Get items count
             int currentNumberOfItemsInDb = database.Items.Where((x) => x.ItemId != "").Count();
+            //If db items count != items count from request
             if (idsOfItemsFromRequest.Count != currentNumberOfItemsInDb)
             {
+                //Get all items in db
                 var currentItemsInDb = database.Items.Where((x) => x.ItemId != "").ToList();
                 Item itemToDelete = new Item();
+
+                //Compare every item id in db to every item id from request
                 for (int i = 0; i < currentNumberOfItemsInDb; i++)
                 {
                     for (int c = 0; c < idsOfItemsFromRequest.Count; c++)
                     {
+                        //If there is an item in db with ID from request
                         if (currentItemsInDb[i].ItemId == idsOfItemsFromRequest[c])
                         {
-                            //reset item if we find match after mismatch
+                            //Reset an itemToDelete if we found a match after a missmatch. Missmatch -> Match -> Missmatch -> Item got deleted
                             itemToDelete = null;
+                            //Break if item was found
                             break;
                         }
                         else
@@ -223,6 +250,7 @@ namespace Backend.Database
                             itemToDelete = currentItemsInDb[i];
                         }
                     }
+                    //Delete item from db
                     if (itemToDelete != null)
                     {
                         database.Items.Remove(itemToDelete);
