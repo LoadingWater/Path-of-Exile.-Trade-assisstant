@@ -64,7 +64,7 @@ namespace GUI
                     //Update database
                     applicationViewModel.DatabaseFunctions.UpdateDatabase(models, applicationViewModel.DatabaseContext);
                     //create datagrid
-                    applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl);
+                    applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl, applicationViewModel.GuiData.Leagues[Leagues.SelectedIndex].Id);
                     //97dfc9145fbfc40c9e19031c4e1b08ba
                 }
                 catch (Exception x)
@@ -86,19 +86,19 @@ namespace GUI
         #region UpdateUiDatagrid
         private void Update_UI_Click(object sender, RoutedEventArgs e)
         {
-            applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl);
+            applicationViewModel.GuiFunctions.CreateDataGrid(applicationViewModel.DatabaseContext, MainTabControl, applicationViewModel.GuiData.Leagues[Leagues.SelectedIndex].Id);
         }
         #endregion
 
-        #region Move settings popup when window location changed
-        private void Window_LocationChanged(object sender, EventArgs e)
-        {
-            //NOTE: Why does it work with any offset change?
-            var originalOffset = Pop.HorizontalOffset;
-            Pop.HorizontalOffset += Pop.HorizontalOffset + 1;
-            Pop.HorizontalOffset = originalOffset;
-        }
-        #endregion
+        //#region Move settings popup when window location changed
+        //private void Window_LocationChanged(object sender, EventArgs e)
+        //{
+        //    //NOTE: Why does it work with any offset change?
+        //    var originalOffset = Pop.HorizontalOffset;
+        //    Pop.HorizontalOffset += Pop.HorizontalOffset + 1;
+        //    Pop.HorizontalOffset = originalOffset;
+        //}
+        //#endregion
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {

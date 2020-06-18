@@ -9,7 +9,6 @@
         d:DesignWidth="1290" d:DesignHeight="728"
         FontFamily="{StaticResource FontingSmallCaps}"
         FontSize="{StaticResource FontSize}"
-        LocationChanged="Window_LocationChanged"
         Loaded="Window_Loaded"
         Closing="Window_Closing">
     
@@ -36,24 +35,22 @@
                 <ColumnDefinition MinWidth="150" MaxWidth="300"/>
             </Grid.ColumnDefinitions>
 
-            <!--region EnterPoeID-->
-            <Border BorderBrush="{StaticResource BorderColor}"
+            <!--region Search-->
+            <Border Grid.Column="0"
+                    BorderBrush="{StaticResource BorderColor}"
                     BorderThickness="{StaticResource BorderThickness}"
                     Background="{StaticResource BrownButtonColor}">
-                <TextBox Name="EnterPoEID"
+                <TextBox Name="SearchItem"
                          Margin="3"
                          FontSize="15"
-                         Text="{Binding Path=GuiData.Poesessid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         GotFocus="EnterPoEID_GotFocus"
-                         LostFocus="EnterPoEID_LostFocus">
+                         Text="Search items">
                 </TextBox>
             </Border>
-            <!--endregion EnterPoeID-->
-
+            <!--endregion Search-->
+           
             <!--region Leagues-->
             <ComboBox Name="Leagues" 
                       Grid.Column="1" 
-                      Grid.Row="2"
                       ItemsSource="{Binding Path=GuiData.Leagues, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                       SelectedIndex="0">
             </ComboBox>
@@ -62,7 +59,6 @@
             <!--region GetItems-->
             <Button Name="GetItems"
                     Grid.Column="2"
-                    Grid.Row="0"
                     Content="Get items"
                     IsEnabled="{Binding Path=GuiData.IsGetItemsAvailable, Mode=OneWay}"
                     Click="Get_items_Click">
@@ -81,7 +77,7 @@
             <!--endregion UpdateUi-->
 
             <!--region RefreshEveryButton-->
-            <ComboBox Name="RefreshEveryButton"  Grid.Column="5" Grid.Row="0">
+            <ComboBox Name="RefreshEveryButton"  Grid.Column="5">
                 <ComboBoxItem Content="5 minute" IsSelected="False"/>
                 <ComboBoxItem Content="3 minute" IsSelected="False"/>
                 <ComboBoxItem Content="2 minute" IsSelected="False"/>
@@ -89,7 +85,22 @@
             </ComboBox>
             <!--endregion RefreshEveryButton-->
 
-            <!--region Settings-->
+            <!--region EnterPoeID-->
+            <Border Grid.Column="6"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Background="{StaticResource BrownButtonColor}">
+                <TextBox Name="EnterPoEID"
+                         Margin="3"
+                         FontSize="15"
+                         Text="{Binding Path=GuiData.Poesessid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="EnterPoEID_GotFocus"
+                         LostFocus="EnterPoEID_LostFocus">
+                </TextBox>
+            </Border>
+            <!--endregion EnterPoeID-->
+
+            <!--region Settings--><!--
             <ToggleButton x:Name="Settings" Grid.Column="6"
                           ClickMode="Press"
                           Background="{StaticResource BrownButtonColor}" 
@@ -125,7 +136,7 @@
                         </Style.Triggers>
                     </Style>
                 </ToggleButton.Style>
-                <!--region Popup-->
+                --><!--region Popup--><!--
                 <Popup x:Name="Pop"
                        Placement="Top"
                        StaysOpen="False"
@@ -152,9 +163,9 @@
                         </StackPanel>
                     </Border>
                 </Popup>
-                <!--endregion Popup-->
+                --><!--endregion Popup--><!--
             </ToggleButton>
-            <!--endregion Settings-->
+            --><!--endregion Settings-->
         </Grid>
         <!--endregion Down definition-->
     </Grid>

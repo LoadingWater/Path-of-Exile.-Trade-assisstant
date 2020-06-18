@@ -12,19 +12,20 @@ namespace Backend.ApplicationViewModel
 {
     public class GuiFunctions
     {
-        public void CreateDataGrid(DatabaseContext database, TabControl mainTabControl)
+        public void CreateDataGrid(DatabaseContext database, TabControl mainTabControl, string league)
         {
             try
             {
+                //serach items with given leagie
                 mainTabControl.Items.Clear();
-                int numberOfTabs = database.Tabs.Count((x) => x.TabId != null);
+                int numberOfTabs = database.Tabs.Count((x) => x.TabLeague == league);
 
                 //Iterate every stash tab 
                 for (int tabNumber = 0; tabNumber < numberOfTabs; tabNumber++)
                 {
                     //Create DataGrid items source
                     List<DataGridItemModel> dataGridItems = new List<DataGridItemModel>();
-                    Tab tab = database.Tabs.Where((x) => x.TabIndex == tabNumber).First();
+                    Tab tab = database.Tabs.Where((x) => x.TabIndex == tabNumber && x.TabLeague == league).First();
                     List<Item> itemsInATab = database.Items.Where((x) => x.TabId == tab.TabId).ToList();
                     //Init all items in a stash tab
                     foreach (var item in itemsInATab)
@@ -38,14 +39,15 @@ namespace Backend.ApplicationViewModel
                             ItemNote = item.ItemNote,
                             TabId = tab.TabId,
                             ItemAffixes = item.ItemAffixes,
-                            ElapsedTime = FormatDateTime(DateTime.Parse(item.CreationTime).Subtract(DateTime.Now)),
-                            ElapsedTimeFromTheLastPriceChange = FormatDateTime(DateTime.Parse(item.PriceChangedTime).Subtract(DateTime.Now))
+                            ElapsedTime = FormatDateTime(DateTime.Now.Subtract(DateTime.Parse(item.CreationTime))),
+                            ElapsedTimeFromTheLastPriceChange = FormatDateTime(DateTime.Now.Subtract(DateTime.Parse(item.PriceChangedTime)))
                         });
                     }
                     //Create DataGrid for every tab if any items
                     if (dataGridItems.Count != 0)
                     {
                         DataGrid dataGrid = new DataGrid() { ItemsSource = dataGridItems };
+                        dataGrid.BorderBrush = Brushes.Blue;
                         TabItem tabItem = new TabItem() { Header = tab.TabName, Content = dataGrid, Background = GetTabItemColour(tab) };
 
                         dataGrid.Columns.Add(CreateDataGridColumn("Name", "ItemName"));
@@ -63,7 +65,6 @@ namespace Backend.ApplicationViewModel
                 MessageBox.Show(ex.Message);
                 throw;
             }
-            
         }
 
         private DataGridTextColumn CreateDataGridColumn(string columnName, string propertyToBindHeaderTo)

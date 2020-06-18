@@ -14,11 +14,18 @@ namespace Backend.Database
         {
             List<string> idsOfItemsFromRequest = new List<string>();
 
+            //Need to create index and increase it when we add a new tab and not skip on for loop index
+            int tabIndex = 0;
             //Iterate through stash tabs
             for (int tabNumber = 0; tabNumber < stashTabs.Count; tabNumber++)
             {
                 var tab = stashTabs[tabNumber].tabs[tabNumber];
-                UpdateTabs(database, tab);
+
+                if (stashTabs[tabNumber].items.Count != 0)
+                {
+                    UpdateTabs(database, tab, stashTabs[tabNumber].items[0].league, tabIndex);
+                    ++tabIndex;
+                }
 
                 //Iterate through tab items
                 for (int itemNumber = 0; itemNumber < stashTabs[tabNumber].items.Count; itemNumber++)
@@ -31,7 +38,7 @@ namespace Backend.Database
             database.SaveChanges();
         }
 
-        private void UpdateTabs(DatabaseContext database, ItemModel.Tab tabFromRequest)
+        private void UpdateTabs(DatabaseContext database, ItemModel.Tab tabFromRequest, string league, int tabIndex)
         {
             var tabFromDb = database.Tabs.Find(tabFromRequest.id);
             if (tabFromDb == null)
@@ -40,22 +47,24 @@ namespace Backend.Database
                 database.Tabs.Add(new Tab() 
                 { 
                     TabName = tabFromRequest.n, 
-                    TabIndex = tabFromRequest.i, 
+                    TabIndex = tabIndex, 
                     TabId = tabFromRequest.id, 
                     TabColourBlue = tabFromRequest.colour.b, 
                     TabColourGreen = tabFromRequest.colour.g, 
-                    TabColourRed = tabFromRequest.colour.r 
+                    TabColourRed = tabFromRequest.colour.r,
+                    TabLeague = league
                 });
             }
             else
             {
                 //Update if found
                 tabFromDb.TabId = tabFromRequest.id;
-                tabFromDb.TabIndex = tabFromRequest.i;
+                tabFromDb.TabIndex = tabIndex;
                 tabFromDb.TabName  = tabFromRequest.n;
                 tabFromDb.TabColourRed  = tabFromRequest.colour.r;
                 tabFromDb.TabColourGreen  = tabFromRequest.colour.g;
                 tabFromDb.TabColourBlue  = tabFromRequest.colour.b;
+                tabFromDb.TabLeague = league;
             }
         }
         private void UpdateItems(DatabaseContext database, ItemModel.Item itemFromRequest, ItemModel.Tab tabFromRequest)

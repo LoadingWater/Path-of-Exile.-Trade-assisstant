@@ -14,5 +14,7 @@ namespace Backend.Database
         public int TabColourRed { get; set; }
         public int TabColourGreen { get; set; }
         public int TabColourBlue { get; set; }
+        public string TabLeague { get; set; }
+
     }
 }
