@@ -40,10 +40,13 @@
                     BorderBrush="{StaticResource BorderColor}"
                     BorderThickness="{StaticResource BorderThickness}"
                     Background="{StaticResource BrownButtonColor}">
-                <TextBox Name="SearchItem"
+                <TextBox Name="SearchItems"
                          Margin="3"
                          FontSize="15"
-                         Text="Search items">
+                         Text="{Binding Path=GuiData.ItemsToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="SearchItems_GotFocus"
+                         LostFocus="SearchItems_LostFocus"
+                         TextChanged="SearchItems_TextChanged">
                 </TextBox>
             </Border>
             <!--endregion Search-->

@@ -15,6 +15,7 @@ namespace Backend.ApplicationViewModel
         private bool _isPopOpen = false;
         private List<LeagueModel> _leagues;
         private bool _isGetItemsAvailable = false;
+        private string _itemsToSearch = "Search items";
 
         public string Poesessid
         {
@@ -72,7 +73,18 @@ namespace Backend.ApplicationViewModel
                 OnPropertyChanged();
             }
         }
-
+        public string ItemsToSearch
+        {
+            get
+            {
+                return _itemsToSearch;
+            }
+            set
+            {
+                _itemsToSearch = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

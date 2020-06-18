@@ -39,10 +39,6 @@ namespace GUI
             {
                 applicationViewModel.GuiData.Poesessid = "Enter sessid";
             }
-            else
-            {
-                
-            }
         }
         #endregion
 
@@ -122,6 +118,40 @@ namespace GUI
             string path = "userData.txt";
             string[] data = { applicationViewModel.GuiData.Poesessid, Leagues.SelectedIndex.ToString() };
             File.WriteAllLines(path, data);
+        }
+
+        private void SearchItems_GotFocus(object sender, RoutedEventArgs e)
+        {
+            applicationViewModel.GuiData.ItemsToSearch = "";
+        }
+
+        private void SearchItems_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (applicationViewModel.GuiData.ItemsToSearch.Length == 0)
+            {
+                applicationViewModel.GuiData.ItemsToSearch = "Search items";
+            }
+        }
+
+        private void SearchItems_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (MainTabControl.Items.Count != 0 && applicationViewModel.GuiData.ItemsToSearch.Length != 0)
+            {
+                int selectedTab = MainTabControl.SelectedIndex;
+                TabItem backupTab = (TabItem)MainTabControl.Items.GetItemAt(selectedTab);
+                DataGrid tabItems = (DataGrid)backupTab.Content;
+                foreach (var item in tabItems.Items)
+                {
+                    string itemName = ((DataGridItemModel)item).ItemName;
+
+                    
+                    if (itemName.Contains(applicationViewModel.GuiData.ItemsToSearch) || itemName.ToLower().Contains(applicationViewModel.GuiData.ItemsToSearch))
+                    {
+                        Debug.WriteLine("----------------------");
+                        Debug.WriteLine(itemName);
+                    }
+                }
+            }
         }
     }
 }
