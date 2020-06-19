@@ -137,18 +137,21 @@ namespace GUI
         {
             if (MainTabControl.Items.Count != 0 && applicationViewModel.GuiData.ItemsToSearch.Length != 0)
             {
-                int selectedTab = MainTabControl.SelectedIndex;
-                TabItem backupTab = (TabItem)MainTabControl.Items.GetItemAt(selectedTab);
-                DataGrid tabItems = (DataGrid)backupTab.Content;
-                foreach (var item in tabItems.Items)
+                int selectedTabindex = MainTabControl.SelectedIndex;
+                TabItem backupTab = (TabItem)MainTabControl.Items.GetItemAt(selectedTabindex);
+                DataGrid tabContent = (DataGrid)backupTab.Content;
+                foreach (var item in tabContent.Items)
                 {
-                    string itemName = ((DataGridItemModel)item).ItemName;
-
-                    
-                    if (itemName.Contains(applicationViewModel.GuiData.ItemsToSearch) || itemName.ToLower().Contains(applicationViewModel.GuiData.ItemsToSearch))
+                    string itemName = ((DataGridItemModel)item).ItemName.ToLower();
+                    string itemToSearch = applicationViewModel.GuiData.ItemsToSearch.ToLower();
+                    if (itemName.Contains(itemToSearch))
                     {
-                        Debug.WriteLine("----------------------");
-                        Debug.WriteLine(itemName);
+                        //Multiple casts to get TabItem content
+                        //tabContent.Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        //tabContent.Items;
                     }
                 }
             }
