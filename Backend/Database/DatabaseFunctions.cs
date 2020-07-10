@@ -14,16 +14,27 @@ namespace Backend.Database
         {
             List<string> idsOfItemsFromRequest = new List<string>();
 
-            //Need to create index and increase it when we add a new tab and not skip on for loop index
+            //Need to create index and increase it when we add a new tab. "For loop index" didn't work
             int tabIndex = 0;
+            //Selected league. Iterate until get a league from an item
+            string league = "No info";
+            for (int i = 0; i < stashTabs.Count; i++)
+            {
+                if (stashTabs[i].items.Count != 0)
+                {
+                    league = stashTabs[i].items[0].league;
+                    break;
+                }
+            }
             //Iterate through stash tabs
             for (int tabNumber = 0; tabNumber < stashTabs.Count; tabNumber++)
             {
                 var tab = stashTabs[tabNumber].tabs[tabNumber];
 
+                //If any items in a tab
                 if (stashTabs[tabNumber].items.Count != 0)
                 {
-                    UpdateTabs(database, tab, stashTabs[tabNumber].items[0].league, tabIndex);
+                    UpdateTabs(database, tab, league, tabIndex);
                     ++tabIndex;
                 }
 
@@ -34,7 +45,8 @@ namespace Backend.Database
                     idsOfItemsFromRequest.Add(stashTabs[tabNumber].items[itemNumber].id);
                 }
             }
-            RemoveMismatchedItemsFromDB(idsOfItemsFromRequest, database);
+
+            RemoveMismatchedItemsFromDB(idsOfItemsFromRequest, database, league);
             database.SaveChanges();
         }
 
@@ -84,6 +96,7 @@ namespace Backend.Database
                         ItemNote = itemFromRequest.note,
                         TabId = tabFromRequest.id,
                         ItemAffixes = RetriveItemAffixes(itemFromRequest),
+                        ItemLeague = itemFromRequest.league,
                         CreationTime = DateTime.Now.ToString(),
                         PriceChangedTime = DateTime.Now.ToString()
                     });
@@ -95,13 +108,14 @@ namespace Backend.Database
                     {
                         itemFromDb.PriceChangedTime = DateTime.Now.ToString();
                     }
+                    itemFromDb.ItemFrameType = itemFromRequest.frameType;
+                    itemFromDb.ItemIconAddress = itemFromRequest.icon;
                     itemFromDb.ItemId = itemFromRequest.id;
                     itemFromDb.ItemName = RetriveItemName(itemFromRequest);
                     itemFromDb.ItemNote = itemFromRequest.note;
-                    itemFromDb.ItemFrameType = itemFromRequest.frameType;
-                    itemFromDb.ItemIconAddress = itemFromRequest.icon;
                     itemFromDb.TabId = tabFromRequest.id;
                     itemFromDb.ItemAffixes = RetriveItemAffixes(itemFromRequest);
+                    itemFromDb.ItemLeague = itemFromRequest.league;
                 }
             }
             catch (System.Exception w)
@@ -229,25 +243,24 @@ namespace Backend.Database
             }
             return cardDescription;
         }
-        private void RemoveMismatchedItemsFromDB(List<string> idsOfItemsFromRequest, DatabaseContext database)
+        private void RemoveMismatchedItemsFromDB(List<string> itemsIdsFromRequest, DatabaseContext database, string league)
         {
-            //NOTE: do this with sql?
-            //Get items count
-            int currentNumberOfItemsInDb = database.Items.Where((x) => x.ItemId != "").Count();
-            //If db items count != items count from request
-            if (idsOfItemsFromRequest.Count != currentNumberOfItemsInDb)
+            //Get number of item within a given league
+            int dbItemsWithinLeagueCount = database.Items.Where((x) => x.ItemLeague == league).Count();
+            //If there are different amount of items in DB and Request under the same league
+            if (itemsIdsFromRequest.Count != dbItemsWithinLeagueCount)
             {
-                //Get all items in db
-                var currentItemsInDb = database.Items.Where((x) => x.ItemId != "").ToList();
+                //Get items within a league
+                var dbItems = database.Items.Where((x) => x.ItemLeague != league).ToList();
                 Item itemToDelete = new Item();
 
-                //Compare every item id in db to every item id from request
-                for (int i = 0; i < currentNumberOfItemsInDb; i++)
+                //Compare every Item ID in DB to every Item ID from a request
+                for (int firstIndex = 0; firstIndex < dbItemsWithinLeagueCount; firstIndex++)
                 {
-                    for (int c = 0; c < idsOfItemsFromRequest.Count; c++)
+                    for (int secondIndex = 0; secondIndex < itemsIdsFromRequest.Count; secondIndex++)
                     {
-                        //If there is an item in db with ID from request
-                        if (currentItemsInDb[i].ItemId == idsOfItemsFromRequest[c])
+                        //If Item was found by ID
+                        if (dbItems[firstIndex].ItemId == itemsIdsFromRequest[secondIndex])
                         {
                             //Reset an itemToDelete if we found a match after a missmatch. Missmatch -> Match -> Missmatch -> Item got deleted
                             itemToDelete = null;
@@ -256,7 +269,7 @@ namespace Backend.Database
                         }
                         else
                         {
-                            itemToDelete = currentItemsInDb[i];
+                            itemToDelete = dbItems[firstIndex];
                         }
                     }
                     //Delete item from db

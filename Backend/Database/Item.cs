@@ -15,6 +15,7 @@ namespace Backend.Database
         public string ItemIconAddress { get; set; }
         public string TabId { get; set; }
         public string ItemAffixes { get; set; }
+        public string ItemLeague { get; set; }
         public string CreationTime{ get; set; }
         public string PriceChangedTime { get; set; }
     }

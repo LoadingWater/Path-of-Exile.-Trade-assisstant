@@ -5,11 +5,7 @@ using System.Net;
 using Backend.Models;
 using Backend.APIFunctions;
 using Backend.ApplicationViewModel;
-using Backend.Database;
-using System.Diagnostics;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace GUI
@@ -146,11 +142,12 @@ namespace GUI
                     string itemToSearch = applicationViewModel.GuiData.ItemsToSearch.ToLower();
                     if (itemName.Contains(itemToSearch))
                     {
-                        //Multiple casts to get TabItem content
+                        
                         //tabContent.Visibility = Visibility.Hidden;
                     }
                     else
                     {
+                        tabContent.Items.Remove(item);
                         //tabContent.Items;
                     }
                 }

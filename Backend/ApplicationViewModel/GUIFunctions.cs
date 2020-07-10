@@ -50,29 +50,37 @@ namespace Backend.ApplicationViewModel
                         dataGrid.BorderBrush = Brushes.Blue;
                         TabItem tabItem = new TabItem() { Header = tab.TabName, Content = dataGrid, Background = GetTabItemColour(tab) };
 
-                        dataGrid.Columns.Add(CreateDataGridColumn("Name", "ItemName"));
-                        dataGrid.Columns.Add(CreateDataGridColumn("Note", "ItemNote"));
-                        dataGrid.Columns.Add(CreateDataGridColumn("Item Affixes", "ItemAffixes"));
-                        dataGrid.Columns.Add(CreateDataGridColumn("Elapsed time", "ElapsedTime"));
-                        dataGrid.Columns.Add(CreateDataGridColumn("Price Changed", "ElapsedTimeFromTheLastPriceChange"));
+                        dataGrid.Columns.Add(CreateDataGridTextColumn("Name", "ItemName"));
+                        dataGrid.Columns.Add(CreateDataGridTextColumn("Note", "ItemNote"));
+                        dataGrid.Columns.Add(CreateDataGridComboBoxColumn("Description"));
+                        dataGrid.Columns.Add(CreateDataGridTextColumn("Elapsed time", "ElapsedTime"));
+                        dataGrid.Columns.Add(CreateDataGridTextColumn("Price Changed", "ElapsedTimeFromTheLastPriceChange"));
 
                         mainTabControl.Items.Add(tabItem);
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 throw;
             }
         }
 
-        private DataGridTextColumn CreateDataGridColumn(string columnName, string propertyToBindHeaderTo)
+        private DataGridTextColumn CreateDataGridTextColumn(string columnName, string propertyToBindHeaderTo)
         {
             DataGridTextColumn column = new DataGridTextColumn();
             column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
             column.Header = columnName;
             column.Binding = new Binding(propertyToBindHeaderTo);
+            return column;
+        }
+
+        private DataGridComboBoxColumn CreateDataGridComboBoxColumn(string columnName)
+        {
+            DataGridComboBoxColumn column = new DataGridComboBoxColumn();
+            column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            column.Header = columnName;
             return column;
         }
 
